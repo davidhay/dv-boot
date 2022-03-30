@@ -9,6 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +24,7 @@ import org.springframework.security.core.context.SecurityContext;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.*;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -70,6 +74,13 @@ public class LoginTest {
           .andReturn();
       SecurityContext ctx = (SecurityContext) result.getRequest().getSession().getAttribute(SPRING_SECURITY_CONTEXT_KEY);
       assertEquals(username, ctx.getAuthentication().getName());
+      Set<String> actualGrantedAuthorityNames = ctx.getAuthentication()
+          .getAuthorities()
+          .stream()
+          .map(ga -> ga.getAuthority().toString())
+          .collect(Collectors.toSet());
+
+      assertEquals(Collections.singleton("ROLE_USER"), actualGrantedAuthorityNames);
     }
 
     @Test

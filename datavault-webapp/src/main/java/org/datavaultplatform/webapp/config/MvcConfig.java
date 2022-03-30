@@ -20,6 +20,7 @@ public class MvcConfig implements WebMvcConfigurer {
   public void addViewControllers (ViewControllerRegistry registry) {
 
     {
+      //TODO : temporary
       //mapping url to a view
       ViewControllerRegistration r = registry.addViewController("/index");
       r.setViewName("index");
@@ -28,6 +29,7 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     {
+      //TODO : temporary
       //mapping url to a view
       ViewControllerRegistration r = registry.addViewController("/secure");
       r.setViewName("secure");

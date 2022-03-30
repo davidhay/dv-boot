@@ -49,7 +49,7 @@ public class HttpSessionEventPublisherTest {
   }
 
   /*
-    The setCookie header value like this : 'JSESSIONID=44310C5F21C6D853C8DC8EAEAEAC6D73; Path=/; HttpOnly'
+    The setCookie header value looks like this : 'JSESSIONID=44310C5F21C6D853C8DC8EAEAEAC6D73; Path=/; HttpOnly'
    */
   private String getSessionId(HttpHeaders headers){
     String setCookie = headers.get("Set-Cookie").get(0);

@@ -11,13 +11,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests()
-          .antMatchers("/resources/**").permitAll()
-          .antMatchers("/error**").permitAll()
-          .antMatchers("/test/**").permitAll()
-          .antMatchers("/actuator/**").permitAll()
-          .antMatchers("/index*").permitAll()
-          .antMatchers("/auth/**").permitAll()
-          .antMatchers("/secure/**").fullyAuthenticated()
+          .antMatchers("/resources/**").permitAll() //OKAY
+          .antMatchers("/actuator/**").permitAll()  //OKAY
+          .antMatchers("/error**").permitAll()      //OKAY
+          .antMatchers("/auth/**").permitAll()      //OKAY
+
+          //TODO : temporary rules
+          .antMatchers("/test/**").permitAll() //TODO - this is temporary
+          .antMatchers("/index*").permitAll() //TODO - this is temporary
+
+          .antMatchers("/**").access("hasRole('ROLE_USER')") //OKAY
           .and()
         .formLogin()
             .loginPage("/auth/login")
