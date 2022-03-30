@@ -48,12 +48,16 @@ public class HttpSessionEventPublisherTest {
     assertEquals(expectedSessionId, actualCreatedSessionId);
   }
 
+  /*
+    The setCookie header value like this : 'JSESSIONID=44310C5F21C6D853C8DC8EAEAEAC6D73; Path=/; HttpOnly'
+   */
   private String getSessionId(HttpHeaders headers){
     String setCookie = headers.get("Set-Cookie").get(0);
+    System.out.printf("Set-Cookie [%s]",setCookie);
     StringTokenizer parts = new StringTokenizer(setCookie, ";", false);
     String part1 = parts.nextToken();
     StringTokenizer parts2 = new StringTokenizer(part1, "=", false);
-    String jsession=parts2.nextToken();
+    parts2.nextToken(); //SKIP OVER 'JSESSIONID' token, we want the next token, the session Id
     String sessionId = parts2.nextToken();
     return sessionId;
   }
