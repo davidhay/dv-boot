@@ -5,6 +5,7 @@ import static java.util.Collections.singletonList;
 import org.datavaultplatform.webapp.config.ActutatorConfig;
 import org.datavaultplatform.webapp.config.MvcConfig;
 import org.datavaultplatform.webapp.config.PrivilegeEvaluatorConfig;
+import org.datavaultplatform.webapp.config.SecurityConfig;
 import org.datavaultplatform.webapp.config.WebConfig;
 import org.datavaultplatform.webapp.config.WebSecurityConfig;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +23,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
     @PropertySource("classpath:datavault.properties")
 })
 @Import({WebConfig.class, MvcConfig.class, PrivilegeEvaluatorConfig.class, ActutatorConfig.class,
-    WebSecurityConfig.class})
+    SecurityConfig.class, WebSecurityConfig.class})
 public class WebApplication {
 
   public WebApplication(FreeMarkerConfigurer freeMarkerConfigurer) {
