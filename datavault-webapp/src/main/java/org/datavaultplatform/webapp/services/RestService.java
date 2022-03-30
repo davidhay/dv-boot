@@ -35,7 +35,6 @@ import org.datavaultplatform.common.response.EventInfo;
 import org.datavaultplatform.common.response.ReviewInfo;
 import org.datavaultplatform.common.response.VaultInfo;
 import org.datavaultplatform.common.response.VaultsData;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 
 public interface RestService extends NotifyLogoutService {

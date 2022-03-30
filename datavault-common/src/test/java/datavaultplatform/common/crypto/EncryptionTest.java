@@ -3,9 +3,6 @@ package datavaultplatform.common.crypto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import datavaultplatform.test.SlowTest;
 import java.io.File;
@@ -25,6 +22,9 @@ import javax.crypto.spec.GCMParameterSpec;
 import org.apache.commons.io.FileUtils;
 import org.bouncycastle.util.encoders.Base64;
 import org.datavaultplatform.common.crypto.Encryption;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class EncryptionTest {
