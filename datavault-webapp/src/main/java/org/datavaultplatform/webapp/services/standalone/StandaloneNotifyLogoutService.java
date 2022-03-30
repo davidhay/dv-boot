@@ -1,6 +1,5 @@
 package org.datavaultplatform.webapp.services.standalone;
 
-import javax.annotation.PostConstruct;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.webapp.services.NotifyLogoutService;
 import org.slf4j.Logger;
