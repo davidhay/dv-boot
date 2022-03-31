@@ -3,6 +3,7 @@ package org.datavaultplatform.webapp.app;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

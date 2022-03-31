@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

@@ -3,7 +3,7 @@ package org.datavaultplatform.webapp.app.encoding;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import org.datavaultplatform.webapp.app.AddTestProperties;
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
