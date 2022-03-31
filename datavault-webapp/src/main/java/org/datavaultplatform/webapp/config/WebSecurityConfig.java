@@ -1,9 +1,12 @@
 package org.datavaultplatform.webapp.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
@@ -12,10 +15,22 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 
 @EnableWebSecurity
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+  @Value("${spring.security.debug:false}")
+  boolean securityDebug;
+
+  @Value("${datavault.csrf.disabled:false}")
+  boolean csrfDisabled;
 
   @Autowired
   SessionRegistry sessionRegistry;
+
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.debug(securityDebug);
+  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -47,5 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .accessDeniedPage("/auth/denied")
           .and()
         .sessionManagement().maximumSessions(1).expiredUrl("/auth/login?security").sessionRegistry(sessionRegistry);
+
+      if(csrfDisabled) {
+        log.warn("CSRF PROTECTION DISABLED!!!!");
+        http.csrf().disable();
+      }
   }
 }

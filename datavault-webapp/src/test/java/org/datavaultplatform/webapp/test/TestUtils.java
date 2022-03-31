@@ -4,23 +4,40 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 
 import java.util.StringTokenizer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.LinkedMultiValueMap;
 
 @Slf4j
 public abstract class TestUtils {
 
+  public static final String SET_COOKIE = "Set-Cookie";
+
   private TestUtils() {
+  }
+
+  public static String getSessionId(HttpHeaders headers) {
+    String setCookieValue = headers.getFirst(SET_COOKIE);
+    return extractSessionId(setCookieValue);
+  }
+
+  public static String getSessionId(MvcResult result) {
+    String setCookieValue = result.getResponse().getHeader(SET_COOKIE);
+    return extractSessionId(setCookieValue);
   }
 
   /*
   The setCookie header value looks like this : 'JSESSIONID=44310C5F21C6D853C8DC8EAEAEAC6D73; Path=/; HttpOnly'
- */
-  public static String getSessionId(HttpHeaders headers){
-    String setCookie = headers.get("Set-Cookie").get(0);
-    log.info("Set-Cookie [{}]",setCookie);
-    StringTokenizer parts = new StringTokenizer(setCookie, ";", false);
+  */
+  private static String extractSessionId(String setCookieValue) {
+    StringTokenizer parts = new StringTokenizer(setCookieValue, ";", false);
     String part1 = parts.nextToken();
     StringTokenizer parts2 = new StringTokenizer(part1, "=", false);
     parts2.nextToken(); //SKIP OVER 'JSESSIONID' token, we want the next token, the session Id
@@ -28,9 +45,29 @@ public abstract class TestUtils {
     return sessionId;
   }
 
-  public static SecurityContext getSecurityContext(MvcResult result){
-    SecurityContext ctx = (SecurityContext) result.getRequest().getSession().getAttribute(SPRING_SECURITY_CONTEXT_KEY);
+  public static SecurityContext getSecurityContext(MvcResult result) {
+    SecurityContext ctx = (SecurityContext) result.getRequest().getSession()
+        .getAttribute(SPRING_SECURITY_CONTEXT_KEY);
     return ctx;
+  }
+
+  public static ResponseEntity<String> login(TestRestTemplate template, String username,
+      String password) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+    params.add(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
+    params.add(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY, password);
+
+    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+        new HttpEntity<>(params, headers);
+
+    return template.exchange(
+        "/auth/security_check",
+        HttpMethod.POST,
+        requestEntity,
+        String.class);
   }
 
 }
