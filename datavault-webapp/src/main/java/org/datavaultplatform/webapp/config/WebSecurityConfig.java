@@ -46,9 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .exceptionHandling()
           .accessDeniedPage("/auth/denied")
           .and()
-        .sessionManagement()
-          .sessionConcurrency(con ->
-              con.expiredUrl("/auth/login?security") //TODO : not sure how to test this
-                  .sessionRegistry(sessionRegistry));
+        .sessionManagement().maximumSessions(1).expiredUrl("/auth/login?security").sessionRegistry(sessionRegistry);
   }
 }
