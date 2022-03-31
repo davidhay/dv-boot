@@ -8,6 +8,7 @@ import org.datavaultplatform.webapp.config.PrivilegeEvaluatorConfig;
 import org.datavaultplatform.webapp.config.SecurityConfig;
 import org.datavaultplatform.webapp.config.WebConfig;
 import org.datavaultplatform.webapp.config.WebSecurityConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,6 +26,9 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 @Import({WebConfig.class, MvcConfig.class, PrivilegeEvaluatorConfig.class, ActutatorConfig.class,
     SecurityConfig.class, WebSecurityConfig.class})
 public class WebApplication {
+
+  @Value("${spring.application.name}")
+  String applicationName;
 
   public WebApplication(FreeMarkerConfigurer freeMarkerConfigurer) {
     freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(singletonList("/META-INF/security.tld"));

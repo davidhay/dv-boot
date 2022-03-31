@@ -24,7 +24,6 @@ import org.springframework.security.core.context.SecurityContext;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.*;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;

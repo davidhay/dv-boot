@@ -1,12 +1,16 @@
-package org.datavaultplatform.webapp.testcontrollers;
+package org.datavaultplatform.webapp.test;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * This SpringMVC controller is used to check values in the ServletContext
+ * @See ServletContextTest
+ */
 @Controller
-public class TestContextParamController {
+public class TestServletContextController {
 
     @GetMapping("/test/context/param")
     @ResponseBody

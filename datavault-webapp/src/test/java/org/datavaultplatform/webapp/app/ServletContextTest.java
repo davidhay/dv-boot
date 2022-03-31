@@ -11,11 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
 
-@ComponentScan("org.datavaultplatform.webapp.testcontrollers")
+@ComponentScan("org.datavaultplatform.webapp.test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AddTestProperties
-class WebAppConfigTest {
+class ServletContextTest {
 
 	@Autowired
 	MockMvc mvc;
