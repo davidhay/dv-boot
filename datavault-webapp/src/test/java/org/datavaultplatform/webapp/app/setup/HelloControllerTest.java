@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app;
+package org.datavaultplatform.webapp.app.setup;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

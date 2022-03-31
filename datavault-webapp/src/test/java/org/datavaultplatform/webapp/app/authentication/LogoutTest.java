@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app;
+package org.datavaultplatform.webapp.app.authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.datavaultplatform.webapp.test.TestUtils.getSecurityContext;
@@ -20,6 +20,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @AddTestProperties
 @WithMockUser(username = "mUser")
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LogoutTest {
 
   @Autowired

@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app;
+package org.datavaultplatform.webapp.app.setup;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app;
+package org.datavaultplatform.webapp.app.authentication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -25,6 +25,8 @@ import org.springframework.security.core.context.SecurityContext;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.*;
 
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -32,6 +34,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @SpringBootTest
 @AutoConfigureMockMvc
 @AddTestProperties
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LoginTest {
 
   @Autowired

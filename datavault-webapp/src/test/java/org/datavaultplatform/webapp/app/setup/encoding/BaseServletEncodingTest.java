@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app.encoding;
+package org.datavaultplatform.webapp.app.setup.encoding;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

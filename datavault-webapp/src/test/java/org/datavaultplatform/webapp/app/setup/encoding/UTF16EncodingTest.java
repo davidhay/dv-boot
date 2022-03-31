@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app.encoding;
+package org.datavaultplatform.webapp.app.setup.encoding;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

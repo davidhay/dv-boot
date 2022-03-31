@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app.encoding;
+package org.datavaultplatform.webapp.app.setup.encoding;
 
 public class UTF8EncodingTest extends BaseServletEncodingTest{
 

@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.app;
+package org.datavaultplatform.webapp.app.authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.datavaultplatform.webapp.test.TestUtils.getSessionId;
@@ -11,6 +11,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.session.HttpSessionCreatedEvent;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AddTestProperties
-@Slf4j
 /**
  * This class tests that the HttpSessionEventPublisher is working as expected.
  */
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class HttpSessionEventPublisherTest {
 
   @Autowired
@@ -89,7 +91,5 @@ public class HttpSessionEventPublisherTest {
       };
     }
   }
-
-
 
 }
