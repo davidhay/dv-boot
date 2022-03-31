@@ -25,17 +25,17 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 })
 @Import({WebConfig.class, MvcConfig.class, PrivilegeEvaluatorConfig.class, ActutatorConfig.class,
     SecurityConfig.class, WebSecurityConfig.class})
-public class WebApplication {
+public class DataVaultWebApp {
 
   @Value("${spring.application.name}")
   String applicationName;
 
-  public WebApplication(FreeMarkerConfigurer freeMarkerConfigurer) {
+  public DataVaultWebApp(FreeMarkerConfigurer freeMarkerConfigurer) {
     freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(singletonList("/META-INF/security.tld"));
   }
 
   public static void main(String[] args) {
-    SpringApplication.run(WebApplication.class, args);
+    SpringApplication.run(DataVaultWebApp.class, args);
   }
 
 }
