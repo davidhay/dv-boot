@@ -1,8 +1,12 @@
 package org.datavaultplatform.webapp.test;
 
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+
 import java.util.StringTokenizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.test.web.servlet.MvcResult;
 
 @Slf4j
 public abstract class TestUtils {
@@ -22,6 +26,11 @@ public abstract class TestUtils {
     parts2.nextToken(); //SKIP OVER 'JSESSIONID' token, we want the next token, the session Id
     String sessionId = parts2.nextToken();
     return sessionId;
+  }
+
+  public static SecurityContext getSecurityContext(MvcResult result){
+    SecurityContext ctx = (SecurityContext) result.getRequest().getSession().getAttribute(SPRING_SECURITY_CONTEXT_KEY);
+    return ctx;
   }
 
 }
