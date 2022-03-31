@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @AddTestProperties
+@Slf4j
 public class MultiPartUploadTest {
 
   @Value("classpath:images/logo-dvsmall.jpg")
@@ -33,7 +35,7 @@ public class MultiPartUploadTest {
   public void testUploadFile() throws Exception {
 
     String filename = dvLogo.getFilename();
-    System.out.printf("FILENAME IS [%s]%n", filename );
+    log.info("FILENAME IS [{}}]", filename );
     MockMultipartFile file = new MockMultipartFile("file",filename, MediaType.IMAGE_JPEG_VALUE, dvLogo.getInputStream());
 
     long expectedSize = dvLogo.contentLength();
@@ -50,7 +52,7 @@ public class MultiPartUploadTest {
   public void testUploadMulti() throws Exception {
 
     String filename = dvLogo.getFilename();
-    System.out.printf("FILENAME IS [%s]%n", filename );
+    log.info("FILENAME IS [{}]%n", filename );
     MockMultipartFile file = new MockMultipartFile("file",filename, MediaType.IMAGE_JPEG_VALUE, dvLogo.getInputStream());
 
     String person = "{\"first\":\"James\",\"last\":\"Bond\"}";

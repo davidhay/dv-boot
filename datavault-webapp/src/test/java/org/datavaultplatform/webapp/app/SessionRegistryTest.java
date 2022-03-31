@@ -2,6 +2,7 @@ package org.datavaultplatform.webapp.app;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 
 @SpringBootTest
+@AddTestProperties
 public class SessionRegistryTest {
 
   @Autowired

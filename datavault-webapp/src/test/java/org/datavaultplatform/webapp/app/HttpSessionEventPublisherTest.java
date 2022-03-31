@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import org.springframework.security.web.session.HttpSessionCreatedEvent;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AddTestProperties
+@Slf4j
 public class HttpSessionEventPublisherTest {
 
   @Autowired
@@ -54,7 +56,7 @@ public class HttpSessionEventPublisherTest {
    */
   private String getSessionId(HttpHeaders headers){
     String setCookie = headers.get("Set-Cookie").get(0);
-    System.out.printf("Set-Cookie [%s]",setCookie);
+    log.info("Set-Cookie [{}]",setCookie);
     StringTokenizer parts = new StringTokenizer(setCookie, ";", false);
     String part1 = parts.nextToken();
     StringTokenizer parts2 = new StringTokenizer(part1, "=", false);
