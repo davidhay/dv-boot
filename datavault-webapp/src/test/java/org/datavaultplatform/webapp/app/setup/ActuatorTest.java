@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.util.Map;
 import java.util.Set;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.test.TestClockConfig;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,18 +33,8 @@ import org.springframework.test.web.servlet.ResultActions;
 @SpringBootTest
 @AddTestProperties
 @AutoConfigureMockMvc
+@Import(TestClockConfig.class)
 public class ActuatorTest {
-
-  @TestConfiguration
-  static class TestConfig {
-
-    @Bean
-    Clock clock() {
-      return Clock.fixed(
-              Instant.parse("2022-03-29T13:15:16.101Z"),
-              ZoneId.of("Europe/London"));
-    }
-  }
 
   @Autowired
   ObjectMapper mapper;
@@ -64,8 +56,7 @@ public class ActuatorTest {
         .andExpect(jsonPath("$.build.time").value(Matchers.is("2022-03-30T12:41:50.383Z")))
         .andExpect(jsonPath("$.java.vendor").exists())
         .andExpect(jsonPath("$.java.runtime.version").exists())
-        .andExpect(jsonPath("$.java.jvm.version").exists())
-        .andDo(print());
+        .andExpect(jsonPath("$.java.jvm.version").exists());
   }
 
   @Test
@@ -74,7 +65,7 @@ public class ActuatorTest {
             get("/actuator/customtime"))
         .andExpect(content().contentTypeCompatibleWith("application/vnd.spring-boot.actuator.v3+json"))
         .andExpect(jsonPath("$.current-time").exists())
-        .andDo(print()).andReturn();
+        .andReturn();
 
     String json = mvcResult.getResponse().getContentAsString();
     Map<String,String> infoMap = mapper.createParser(json).readValueAs(Map.class);
@@ -90,7 +81,7 @@ public class ActuatorTest {
     assertEquals(ImmutableSet.of("env","beans","info","health","customtime"), endpoints);
 
     ResultActions temp = mvc.perform(get("/actuator"))
-        .andExpect(status().isOk()).andDo(print());
+        .andExpect(status().isOk());
 
     for(String endpoint : endpoints){
       temp.andExpect(jsonPath("$._links."+endpoint).exists());
