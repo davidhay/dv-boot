@@ -3,12 +3,14 @@ package org.datavaultplatform.webapp.app.setup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.session.SessionRegistry;
 
 @SpringBootTest
+@AddTestProperties
 public class SessionRegistrySetupTest {
 
   /**

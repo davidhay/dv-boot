@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
  * This class tests that the HttpSessionEventPublisher is working as expected.
  */
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@AddTestProperties
 public class HttpSessionEventPublisherTest {
 
   @Autowired
