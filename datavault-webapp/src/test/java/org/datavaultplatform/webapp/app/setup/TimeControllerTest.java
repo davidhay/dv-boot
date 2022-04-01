@@ -23,7 +23,7 @@ public class TimeControllerTest {
   MockMvc mvc;
 
   @Test
-  void testTimeController(ApplicationContext ctx) throws Exception {
+  void testTimeController() throws Exception {
     mvc.perform(get("/test/time")).andExpect(
         content()
             .string("{\"time\":\"2022-03-29T14:15:16.101\"}"));
