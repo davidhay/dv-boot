@@ -2,29 +2,27 @@ package org.datavaultplatform.webapp.app.authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
@@ -34,14 +32,20 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 /**
- * Checks that when a user logs in, their session is registered in the SessionRegistry
+ * Checks that a session times out.
+ * The minimum timeout for tomcat is 1 minute.
+ * Tomcat takes about 2 minutes to perform the timeout.
+ * TODO - make sure SLOW tests like this only run in CICD
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AddTestProperties
-@TestPropertySource(properties = "datavault.csrf.disabled=true")
+@TestPropertySource(properties = {"datavault.csrf.disabled=true",
+    "server.servlet.session.timeout=1m"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@Slf4j
 @Import(WaitForLogoutNotificationConfig.class)
-public class SessionRegistryUsageTest {
+@Disabled
+public class SessionTimedOutTest {
 
   @Value("${spring.security.user.name}")
   String username;
@@ -63,12 +67,10 @@ public class SessionRegistryUsageTest {
   @Autowired
   List<CreateClientEvent> events;
 
+  @Value("${server.servlet.session.timeout}")
+  String sessionTimeoutRaw;
+
   String sessionIdOne;
-
-  String sessionIdTwo;
-
-  @LocalServerPort
-  private int port;
 
   private static ResponseEntity<String> makeGetRequestWithSession(TestRestTemplate template,
       String url, String sessionId) {
@@ -78,57 +80,31 @@ public class SessionRegistryUsageTest {
     return template.exchange(url, HttpMethod.GET, entity, String.class);
   }
 
-  /**
-   * This is a sophisticated test. It performs a sequence of actions and tests.
-   * <p>
-   * Given we have valid credentials
-   * When we perform an initial login
-   * Then the login is successful
-   * And the session is registered
-   * TODO - we need to add checks when we bring in AuthenticationSuccessHandler
-   * <p>
-   * Given we are logged in
-   * When we attempt to access a secure page
-   * Then we are successful
-   * <p>
-   * Given we are logged in
-   * When we login again
-   * Then the 2nd session is valid and registered
-   * TODO - we need to add checks when we bring in AuthenticationSuccessHandler
-   * And the initial session is invalidated
-   * And the broker is notified of the 1st session logout
-   * <p>
-   * Given that the 2nd session is now invalid
-   * When the 2nd session attempts to access a secure page
-   * Then it is redirected to 'auth/login?secure'
-   */
   @Test
-  void testSameUserLoggedInTwice() throws InterruptedException {
+  void testLoginUserAndWaitForSessionTimeout() throws InterruptedException {
+    assertEquals("1m", sessionTimeoutRaw);
     checkInitialLoginSuccessful();
     checkLoggedInUserCanAccessSecurePage(sessionIdOne, true);
 
     assertEquals(1, latch.getCount());
-    checkNewLoginFailsOldConcurrentLoginIsExpired();
-    checkLoggedInUserCanAccessSecurePage(sessionIdTwo, true);
 
-    //check that the 'previous' session is expired and redirected back to login
-    ResponseEntity<String> notOkay = checkLoggedInUserCanAccessSecurePage(sessionIdOne, false);
-    assertEquals(notOkay.getStatusCode(), HttpStatus.FOUND);//REDIRECT
-    assertEquals(TestUtils.getFullURI(port, "/auth/login?security"),
-        notOkay.getHeaders().getLocation());
-
-    checkLogoutNotified(sessionIdOne);
+    long start = System.currentTimeMillis();
+    checkLogoutNotified(sessionIdOne, 150);
+    long diff = System.currentTimeMillis() - start;
+    assertTrue(diff >= 60);
+    log.info("Took Tomcat [%d] to time session out - should have taken around 60",
+        TimeUnit.MILLISECONDS.toSeconds(diff));
   }
 
-  private void checkLogoutNotified(String sessionId) throws InterruptedException {
-    latch.await(5, TimeUnit.SECONDS);
+  private void checkLogoutNotified(String sessionId, int seconds) throws InterruptedException {
+    log.info("Waiting for Logout Notification of session {}",sessionId);
+    latch.await(seconds, TimeUnit.SECONDS);
     CreateClientEvent event1 = events.get(0);
     assertEquals(sessionId, event1.getSessionId());
   }
 
   void checkInitialLoginSuccessful() {
     ResponseEntity<String> responseEntity = TestUtils.login(template, username, password);
-
     sessionIdOne = TestUtils.getSessionId(responseEntity.getHeaders());
 
     TestUtils.waitForSessionRegistryToHaveAnEntry(sessionRegistry);
@@ -147,39 +123,11 @@ public class SessionRegistryUsageTest {
 
   ResponseEntity<String> checkLoggedInUserCanAccessSecurePage(String sessionId,
       boolean accessExpected) {
-    ResponseEntity<String> securePage = makeGetRequestWithSession(template, "/secure", sessionId);
+    ResponseEntity<String> securePage = makeGetRequestWithSession(template, "/test/hello",
+        sessionId);
     boolean accessOkay = securePage.getStatusCode().is2xxSuccessful();
     assertEquals(accessExpected, accessOkay);
     return securePage;
-  }
-
-  /**
-   * When the same user logs in a second time, their previous session becomes invalid.
-   */
-  void checkNewLoginFailsOldConcurrentLoginIsExpired() {
-    ResponseEntity<String> responseEntity = TestUtils.login(template, username, password);
-    sessionIdTwo = TestUtils.getSessionId(responseEntity.getHeaders());
-    Assertions.assertNotEquals(sessionIdOne, sessionIdTwo);
-
-    assertThat(sessionRegistry.getAllPrincipals()).hasSize(1);
-    User principal = (User) sessionRegistry.getAllPrincipals().get(0);
-    assertThat(principal.getUsername()).isEqualTo(username);
-
-    List<SessionInformation> sessions = sessionRegistry.getAllSessions(principal, true);
-    assertThat(sessions).hasSize(2);
-
-    //The old session WILL be expired
-    SessionInformation session1 = findSession(sessions, sessionIdOne);
-    assertTrue(session1.isExpired());
-
-    //The new session will NOT be expired
-    SessionInformation session2 = findSession(sessions, sessionIdTwo);
-    assertFalse(session2.isExpired());
-
-  }
-
-  private SessionInformation findSession(List<SessionInformation> sessions, String sessionId) {
-    return sessions.stream().filter(s -> s.getSessionId().equals(sessionId)).findFirst().get();
   }
 
 }
