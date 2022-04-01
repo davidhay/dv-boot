@@ -14,12 +14,14 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.test.DummyNotifyLogoutServiceConfig;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.test.annotation.DirtiesContext;
@@ -32,6 +34,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @AutoConfigureMockMvc
 @AddTestProperties
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@Import(DummyNotifyLogoutServiceConfig.class)
 public class LoginTest {
 
   @Autowired

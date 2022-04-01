@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.test.DummyNotifyLogoutServiceConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.session.HttpSessionCreatedEvent;
@@ -32,6 +34,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
  */
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @AddTestProperties
+@Import(DummyNotifyLogoutServiceConfig.class)
 public class HttpSessionEventPublisherTest {
 
   @Autowired
