@@ -19,8 +19,6 @@ public class SessionRegistrySetupTest {
   @Test
   void testSessionRegistryBean(ApplicationContext ctx) {
     SessionRegistry sessionRegistry = ctx.getBean("sessionRegistry", SessionRegistry.class);
-    assert(sessionRegistry.getAllPrincipals().isEmpty());
-    assertNotNull(sessionRegistry);
     assertThat(sessionRegistry.getAllPrincipals()).isEmpty();
   }
 
