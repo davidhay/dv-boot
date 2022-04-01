@@ -1,7 +1,6 @@
 package org.datavaultplatform.webapp.app.setup;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import org.datavaultplatform.webapp.test.AddTestProperties;
@@ -33,7 +32,6 @@ public class StaticAssetsTest {
 
     MvcResult res = mvc.perform(get("/resources/test/js/hello.js"))
         .andExpect(content().string(Matchers.containsString("Hello World!")))
-        .andDo(print())
         .andReturn();
 
     MediaType actual = MediaType.parseMediaType(res.getResponse().getContentType());
@@ -55,7 +53,6 @@ public class StaticAssetsTest {
 
     MvcResult res = mvc.perform(get("/resources/test/css/hello.css"))
         .andExpect(content().string(Matchers.containsString("hello-title")))
-        .andDo(print())
         .andReturn();
 
     MediaType actual = MediaType.parseMediaType(res.getResponse().getContentType());

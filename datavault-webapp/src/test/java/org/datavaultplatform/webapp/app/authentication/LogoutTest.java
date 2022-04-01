@@ -52,7 +52,6 @@ public class LogoutTest {
     MvcResult result =
         mvc.perform(get("/secure").session(mSession))
             .andExpect(authenticated())
-            .andDo(print())
             .andReturn();
     SecurityContext ctx = getSecurityContext(result);
     Authentication auth = ctx.getAuthentication();
@@ -92,7 +91,6 @@ public class LogoutTest {
 
     MvcResult result =
         mvc.perform(get("/auth/logout").session(mSession))
-            .andDo(print())
             .andReturn();
 
     //AFTER LOGGING OUT - the session is invalid

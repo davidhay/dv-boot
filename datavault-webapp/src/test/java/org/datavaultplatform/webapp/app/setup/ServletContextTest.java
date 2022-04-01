@@ -24,22 +24,19 @@ class ServletContextTest {
 	@Test
 	void testContextParam() throws Exception {
 		mvc.perform(get("/test/context/param"))
-				.andExpect(content().string("webapp.root"))
-				.andDo(print());
+				.andExpect(content().string("webapp.root"));
 	}
 
 	@Test
 	void testDisplayName() throws Exception {
 		mvc.perform(get("/test/display/name"))
-				.andExpect(content().string("datavault-webapp"))
-				.andDo(print());
+				.andExpect(content().string("datavault-webapp"));
 	}
 
 	@Test
 	void testSessionTimeout() throws Exception {
 		mvc.perform(get("/test/session/timeout"))
-				.andExpect(content().string("15"))
-				.andDo(print());
+				.andExpect(content().string("15"));
 	}
 
 }

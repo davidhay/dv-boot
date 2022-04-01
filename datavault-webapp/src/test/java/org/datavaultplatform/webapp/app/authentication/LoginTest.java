@@ -70,7 +70,6 @@ public class LoginTest {
           login(username, password)
           .andExpect(authenticated())
           .andExpect(redirectedUrl("/"))
-          .andDo(print())
           .andReturn();
       SecurityContext ctx = (SecurityContext) result.getRequest().getSession().getAttribute(SPRING_SECURITY_CONTEXT_KEY);
       assertEquals(username, ctx.getAuthentication().getName());
@@ -87,8 +86,7 @@ public class LoginTest {
     void fail() throws Exception {
       login(username, "XXXX")
           .andExpect(unauthenticated())
-          .andExpect(redirectedUrl("/auth/login?error=true"))
-          .andDo(print());
+          .andExpect(redirectedUrl("/auth/login?error=true"));
     }
 
   }

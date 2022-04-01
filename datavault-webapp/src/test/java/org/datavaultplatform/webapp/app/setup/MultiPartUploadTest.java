@@ -41,7 +41,6 @@ public class MultiPartUploadTest {
     String expectedResult = String.format("name[file]type[image/jpeg]size[%d]", expectedSize);
 
     mockMvc.perform(multipart("/test/upload/file").file(file).with(csrf()))
-        .andDo(print())
         .andExpect(content().string(expectedResult))
         .andExpect(status().isOk());
 
@@ -66,7 +65,6 @@ public class MultiPartUploadTest {
             .file(file)
             .file(personFile)
             .with(csrf()))
-        .andDo(print())
         .andExpect(content().string(expectedResult))
         .andExpect(status().isOk());
 
