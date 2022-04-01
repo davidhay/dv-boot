@@ -1,42 +1,50 @@
 package org.datavaultplatform.webapp.app.setup;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+import javax.servlet.ServletContext;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-@ComponentScan("org.datavaultplatform.webapp.test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AddTestProperties
+@TestPropertySource(properties = "server.servlet.session.timeout=14m")
 class ServletContextTest {
+
+	@Value("${server.servlet.session.timeout}")
+	String timeoutRaw;
 
 	@Autowired
 	MockMvc mvc;
 
 	@Test
-	void testContextParam() throws Exception {
-		mvc.perform(get("/test/context/param"))
-				.andExpect(content().string("webapp.root"));
-	}
+	void testServletConfig() throws Exception {
+		assertEquals("14m", timeoutRaw);
 
-	@Test
-	void testDisplayName() throws Exception {
-		mvc.perform(get("/test/display/name"))
-				.andExpect(content().string("datavault-webapp"));
-	}
+		MvcResult result = mvc.perform(get("/test/hello")).andReturn();
 
-	@Test
-	void testSessionTimeout() throws Exception {
-		mvc.perform(get("/test/session/timeout"))
-				.andExpect(content().string("15"));
+		ServletContext ctx = result.getRequest().getServletContext();
+
+		//check session timeout
+		long timeoutMinutes = ctx.getSessionTimeout();
+		assertEquals(14, timeoutMinutes);
+
+		//check display name
+		String displayName = ctx.getServletContextName();
+		assertEquals("datavault-webapp", displayName);
+
+		//check web app root key
+		String webAppRootKey = ctx.getInitParameter("webAppRootKey");
+		assertEquals("webapp.root", webAppRootKey);
 	}
 
 }
