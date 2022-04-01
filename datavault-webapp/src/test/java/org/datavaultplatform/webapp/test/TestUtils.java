@@ -1,8 +1,12 @@
 package org.datavaultplatform.webapp.test;
 
+import static org.awaitility.Awaitility.await;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
+import java.net.URI;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -11,14 +15,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 public abstract class TestUtils {
 
   public static final String SET_COOKIE = "Set-Cookie";
+  public static final String COOKIE = "Cookie";
+  public static final Object SESSION_COOKIE = "JSESSIONID";
 
   private TestUtils() {
   }
@@ -69,5 +78,33 @@ public abstract class TestUtils {
         requestEntity,
         String.class);
   }
+
+  public static void setSessionCookieHeader(HttpHeaders headers, String sessionId){
+    headers.set(COOKIE, String.format("%s=%s;", SESSION_COOKIE, sessionId));
+  }
+
+  public static URI getFullURI(int port, String relativePath) {
+    String[] parts = relativePath.split("\\?");
+    String pathOnly = parts[0];
+    String query = parts[1];
+    UriComponents uriComponents = UriComponentsBuilder.newInstance()
+        .scheme("http")
+        .host("localhost")
+        .port(port)
+        .path(pathOnly)
+        .query(query)
+        .build();
+    return uriComponents.toUri();
+  }
+
+  public static void waitForSessionRegistryToHaveAnEntry(SessionRegistry sessionRegistry) {
+    //We have to wait for session to be added to sessionRegistry
+    Callable<Boolean> ready = () -> sessionRegistry.getAllPrincipals().isEmpty() == false;
+
+    await().atMost(5, TimeUnit.SECONDS)
+        .pollInterval(100, TimeUnit.MILLISECONDS)
+        .until(ready);
+  }
+
 
 }
