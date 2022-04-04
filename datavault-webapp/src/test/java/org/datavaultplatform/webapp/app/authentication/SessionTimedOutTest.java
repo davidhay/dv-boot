@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
 import org.junit.jupiter.api.Disabled;
@@ -43,8 +44,7 @@ import org.springframework.test.context.TestPropertySource;
     "server.servlet.session.timeout=1m"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
-@Import(WaitForLogoutNotificationConfig.class)
-@Disabled
+@Import({DummyNotifyLoginServiceConfig.class, WaitForLogoutNotificationConfig.class})
 public class SessionTimedOutTest {
 
   @Value("${spring.security.user.name}")

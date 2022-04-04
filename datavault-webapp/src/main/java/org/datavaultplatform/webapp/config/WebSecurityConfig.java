@@ -1,6 +1,7 @@
 package org.datavaultplatform.webapp.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.controllers.authentication.AuthenticationSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   SessionRegistry sessionRegistry;
+
+  @Autowired
+  AuthenticationSuccess authenticationSuccess;
 
   @Override
   public void configure(WebSecurity web) throws Exception {
@@ -48,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/auth/security_check")
             .failureUrl("/auth/login?error=true")
             .defaultSuccessUrl("/")
+            .successHandler(authenticationSuccess)
             .and()
         .logout()
           .logoutUrl("/auth/logout")

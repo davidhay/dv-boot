@@ -5,15 +5,22 @@ import static org.datavaultplatform.webapp.test.TestUtils.getSecurityContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import org.datavaultplatform.common.request.CreateClientEvent;
+import org.datavaultplatform.webapp.services.NotifyLogoutService;
 import org.datavaultplatform.webapp.test.AddTestProperties;
-import org.datavaultplatform.webapp.test.DummyNotifyLogoutServiceConfig;
+import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -32,11 +39,23 @@ import org.springframework.test.web.servlet.MvcResult;
 @AddTestProperties
 @WithMockUser(username = "mUser")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@Import(DummyNotifyLogoutServiceConfig.class)
+@Import(DummyNotifyLoginServiceConfig.class)
+/**
+ * This test checks basic Logout.
+ * It does NOT test the LogoutListener and NotifyLogoutService as these depend
+ * on tomcat generated SessionDestroyedEvents
+ * To test LogoutListener - we must use RestTemplate/TestRestTemplate.
+ */
 public class LogoutTest {
+
+  @MockBean
+  NotifyLogoutService mNotifyLogoutService;
 
   @Autowired
   MockMvc mvc;
+
+  @Captor
+  ArgumentCaptor<CreateClientEvent> argLogoutEvent;
 
   MockHttpSession getMockSession() {
     MockHttpSession result = new MockHttpSession();
@@ -89,7 +108,7 @@ public class LogoutTest {
     performLogoutCheck();
   }
 
-  void performLogoutCheck() throws Exception {
+  MvcResult performLogoutCheck() throws Exception {
     MockHttpSession mSession = getMockSession();
 
     MvcResult result =
@@ -104,7 +123,17 @@ public class LogoutTest {
     Assertions.assertNull(ctx);
 
     assertEquals("/auth/confirmation", result.getResponse().getRedirectedUrl());
+    return result;
   }
 
+  @BeforeEach
+  void interceptLogoutNotifications() {
+    Mockito.when(mNotifyLogoutService.notifyLogout(argLogoutEvent.capture())).thenReturn("NOTIFIED");
+  }
+
+  @AfterEach
+  void checkNoLogoutNotificationsBecauseOfTestMechanism() {
+    Mockito.verifyNoInteractions(mNotifyLogoutService);
+  }
 
 }

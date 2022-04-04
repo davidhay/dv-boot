@@ -10,6 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +41,7 @@ import org.springframework.test.context.TestPropertySource;
 @AddTestProperties
 @TestPropertySource(properties = "datavault.csrf.disabled=true")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@Import(WaitForLogoutNotificationConfig.class)
+@Import({DummyNotifyLoginServiceConfig.class, WaitForLogoutNotificationConfig.class})
 public class SessionRegistryUsageTest {
 
   @Value("${spring.security.user.name}")

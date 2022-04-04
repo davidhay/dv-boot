@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
 import org.datavaultplatform.webapp.test.DummyNotifyLogoutServiceConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
  */
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @AddTestProperties
-@Import(DummyNotifyLogoutServiceConfig.class)
+@Import({DummyNotifyLoginServiceConfig.class, DummyNotifyLogoutServiceConfig.class})
 public class HttpSessionEventPublisherTest {
 
   @Autowired
