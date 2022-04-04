@@ -10,6 +10,7 @@ import org.datavaultplatform.common.response.VaultInfo;
 import org.datavaultplatform.webapp.services.RestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +41,7 @@ public class ScopedPermissionEvaluator implements PermissionEvaluator {
     private static final Logger logger = LoggerFactory.getLogger(ScopedPermissionEvaluator.class);
     private final RestService rest;
 
+    @Autowired
     public ScopedPermissionEvaluator(RestService rest) {
         this.rest = rest;
     }
