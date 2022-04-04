@@ -45,6 +45,7 @@ import org.springframework.test.context.TestPropertySource;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
 @Import({DummyNotifyLoginServiceConfig.class, WaitForLogoutNotificationConfig.class})
+@Disabled
 public class SessionTimedOutTest {
 
   @Value("${spring.security.user.name}")
