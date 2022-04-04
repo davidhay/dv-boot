@@ -7,12 +7,10 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import org.datavaultplatform.common.request.CreateClientEvent;
-import org.datavaultplatform.webapp.services.NotifyLogoutService;
+import org.datavaultplatform.webapp.services.RestService;
 import org.datavaultplatform.webapp.test.AddTestProperties;
-import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +36,6 @@ import org.springframework.test.web.servlet.MvcResult;
 @AddTestProperties
 @WithMockUser(username = "mUser")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@Import(DummyNotifyLoginServiceConfig.class)
 /**
  * This test checks basic Logout.
  * It does NOT test the LogoutListener and NotifyLogoutService as these depend
@@ -49,7 +45,7 @@ import org.springframework.test.web.servlet.MvcResult;
 public class LogoutTest {
 
   @MockBean
-  NotifyLogoutService mNotifyLogoutService;
+  RestService mRestService;
 
   @Autowired
   MockMvc mvc;
@@ -64,8 +60,7 @@ public class LogoutTest {
   }
 
   /**
-   * Just checks that the @WithMockUser is working as expected
-   * Does not test logout
+   * Just checks that the @WithMockUser is working as expected Does not test logout
    */
   @Test
   void testMockUser() throws Exception {
@@ -98,6 +93,7 @@ public class LogoutTest {
 
   /**
    * Tests that logout can still be accessed by someone who is not logged in
+   *
    * @throws Exception
    */
   @Test
@@ -126,14 +122,9 @@ public class LogoutTest {
     return result;
   }
 
-  @BeforeEach
-  void interceptLogoutNotifications() {
-    Mockito.when(mNotifyLogoutService.notifyLogout(argLogoutEvent.capture())).thenReturn("NOTIFIED");
-  }
-
   @AfterEach
   void checkNoLogoutNotificationsBecauseOfTestMechanism() {
-    Mockito.verifyNoInteractions(mNotifyLogoutService);
+    Mockito.verifyNoInteractions(mRestService);
   }
 
 }

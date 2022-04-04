@@ -16,9 +16,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
-import org.datavaultplatform.webapp.services.NotifyLoginService;
+import org.datavaultplatform.webapp.services.RestService;
 import org.datavaultplatform.webapp.test.AddTestProperties;
-import org.datavaultplatform.webapp.test.DummyNotifyLogoutServiceConfig;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -29,7 +28,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.test.annotation.DirtiesContext;
@@ -42,11 +40,10 @@ import org.springframework.test.web.servlet.ResultActions;
 @AutoConfigureMockMvc
 @AddTestProperties
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@Import({DummyNotifyLogoutServiceConfig.class})
 public class LoginTest {
 
   @MockBean
-  NotifyLoginService mNotifyLoginService;
+  RestService mRestService;
 
   @Autowired
   MockMvc mvc;
@@ -63,7 +60,7 @@ public class LoginTest {
     mvc.perform(get("/test/hello")).andExpect(status().isOk());
     mvc.perform(get("/error")).andExpect(status().isInternalServerError());
 
-    Mockito.verifyNoInteractions(mNotifyLoginService);
+    Mockito.verifyNoInteractions(mRestService);
   }
 
   @Test
@@ -72,7 +69,7 @@ public class LoginTest {
     assertEquals(HttpStatus.FOUND.value(), result.getResponse().getStatus());
     assertEquals("http://localhost/auth/login", result.getResponse().getRedirectedUrl());
 
-    Mockito.verifyNoInteractions(mNotifyLoginService);
+    Mockito.verifyNoInteractions(mRestService);
   }
 
   @Nested
@@ -87,8 +84,8 @@ public class LoginTest {
 
     @Test
     void success() throws Exception {
-      Mockito.when(mNotifyLoginService.notifyLogin(argClientEvent.capture())).thenReturn("NOTIFIED");
-      Mockito.when(mNotifyLoginService.getGroups()).thenReturn(new Group[0]);
+      Mockito.when(mRestService.notifyLogin(argClientEvent.capture())).thenReturn("NOTIFIED");
+      Mockito.when(mRestService.getGroups()).thenReturn(new Group[0]);
 
       MvcResult result =
           login(username, password)
@@ -107,9 +104,9 @@ public class LoginTest {
 
       assertEquals(Collections.singleton("ROLE_USER"), actualGrantedAuthorityNames);
 
-      Mockito.verify(mNotifyLoginService, times(1)).notifyLogin(argClientEvent.getValue());
-      Mockito.verify(mNotifyLoginService, times(1)).getGroups();
-      Mockito.verifyNoMoreInteractions(mNotifyLoginService);
+      Mockito.verify(mRestService, times(1)).notifyLogin(argClientEvent.getValue());
+      Mockito.verify(mRestService, times(1)).getGroups();
+      Mockito.verifyNoMoreInteractions(mRestService);
 
       assertEquals(sessionId, argClientEvent.getValue().getSessionId());
     }
@@ -121,7 +118,7 @@ public class LoginTest {
           .andExpect(unauthenticated())
           .andExpect(redirectedUrl("/auth/login?error=true"));
 
-      Mockito.verifyNoInteractions(mNotifyLoginService);
+      Mockito.verifyNoInteractions(mRestService);
     }
 
   }

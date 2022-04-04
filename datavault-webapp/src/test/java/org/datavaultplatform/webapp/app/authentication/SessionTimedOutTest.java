@@ -9,8 +9,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.common.request.CreateClientEvent;
+import org.datavaultplatform.webapp.services.RestService;
 import org.datavaultplatform.webapp.test.AddTestProperties;
-import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
 import org.junit.jupiter.api.Disabled;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
@@ -44,9 +45,12 @@ import org.springframework.test.context.TestPropertySource;
     "server.servlet.session.timeout=1m"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
-@Import({DummyNotifyLoginServiceConfig.class, WaitForLogoutNotificationConfig.class})
+@Import(WaitForLogoutNotificationConfig.class)
 @Disabled
 public class SessionTimedOutTest {
+
+  @MockBean
+  RestService mRestService;
 
   @Value("${spring.security.user.name}")
   String username;

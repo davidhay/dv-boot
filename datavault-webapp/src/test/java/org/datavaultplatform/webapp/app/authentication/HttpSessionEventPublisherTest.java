@@ -9,19 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.datavaultplatform.webapp.services.RestService;
 import org.datavaultplatform.webapp.test.AddTestProperties;
-import org.datavaultplatform.webapp.test.DummyNotifyLoginServiceConfig;
-import org.datavaultplatform.webapp.test.DummyNotifyLogoutServiceConfig;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.session.HttpSessionCreatedEvent;
@@ -31,12 +32,14 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 /**
- * This class tests that the HttpSessionEventPublisher is working as expected.
+ * This class tests that the HttpSessionEventPublisher bean is working as expected.
  */
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @AddTestProperties
-@Import({DummyNotifyLoginServiceConfig.class, DummyNotifyLogoutServiceConfig.class})
 public class HttpSessionEventPublisherTest {
+
+  @MockBean
+  RestService mRestService;
 
   @Autowired
   HttpSessionEventPublisher publisher;
@@ -68,6 +71,11 @@ public class HttpSessionEventPublisherTest {
     assertEquals(expectedSessionId, actualCreatedSessionId);
   }
 
+  @AfterEach
+  void tearDown() {
+    Mockito.verifyNoInteractions(mRestService);
+  }
+
   @TestConfiguration
   static class TestConfig {
 
@@ -84,7 +92,7 @@ public class HttpSessionEventPublisherTest {
     /*
      * This bean registers itself as an HttpSessionCreatedEvent listener. It puts the events into a list.
      * The list can be seen by the test.
-     * After is receives an event, it notifies the test via the latch.
+     * After it receives an event, it notifies the waiting test via the latch.
      */
     @Bean
     ApplicationListener<HttpSessionCreatedEvent> listener(CountDownLatch latch, ArrayList<HttpSessionCreatedEvent> events){
