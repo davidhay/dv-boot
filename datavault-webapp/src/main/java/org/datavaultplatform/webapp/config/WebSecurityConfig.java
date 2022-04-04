@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.controllers.authentication.AuthenticationSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 @EnableWebSecurity
@@ -39,10 +42,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.debug(securityDebug);
+    web.expressionHandler(getHandler("web"));
+  }
 
-    DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+  private DefaultWebSecurityExpressionHandler getHandler(final String context){
+    DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler(){
+      @Override
+      public String toString(){
+        return context + ":" + super.toString();
+      }
+    };
     handler.setPermissionEvaluator(evaluator);
-    web.expressionHandler(handler);
+    return handler;
   }
 
   @Override
@@ -60,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers("/index*").permitAll() //TODO - this is temporary
 
           .antMatchers("/**").access("hasRole('ROLE_USER')") //OKAY
+          .expressionHandler(getHandler("http")) //TODO - do we need this ?
           .and()
         .formLogin()
             .loginPage("/auth/login")
@@ -75,7 +87,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .exceptionHandling()
           .accessDeniedPage("/auth/denied")
           .and()
-        .sessionManagement().maximumSessions(1).expiredUrl("/auth/login?security").sessionRegistry(sessionRegistry);
+        .sessionManagement()
+          .maximumSessions(1)
+          .expiredUrl("/auth/login?security")
+          .sessionRegistry(sessionRegistry);
 
       if(csrfDisabled) {
         log.warn("CSRF PROTECTION DISABLED!!!!");
