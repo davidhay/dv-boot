@@ -1,6 +1,7 @@
 package org.datavaultplatform.webapp.controllers;
 
 import java.util.stream.Collectors;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,6 +36,10 @@ public class SecurityAnnotationController {
     return "isUser";
   }
 
-
+  @GetMapping(value = "/admin/secured")
+  @Secured("ROLE_ADMIN")
+  public String getSecuredForAdminOnly(){
+    return "isAdmin@Secured";
+  }
 
 }

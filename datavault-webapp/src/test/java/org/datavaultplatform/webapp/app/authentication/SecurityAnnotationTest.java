@@ -105,4 +105,33 @@ public class SecurityAnnotationTest {
     }
   }
 
+  /**
+   * These tests check that the @Secured("ADMIN_ROLE") annotations are working
+   */
+  @Nested
+  class SecuredAdminRoleTests {
+
+    @SneakyThrows
+    MvcResult checkAdminOnlyPage() {
+      return mvc.perform(
+              get(PREFIX + "/admin/secured"))
+          .andReturn();
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void testNoAdminIsDenied() {
+      MvcResult result = checkAdminOnlyPage();
+      checkDenied(result);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void testAdminIsAllowed() {
+      MvcResult result = checkAdminOnlyPage();
+      checkOkay(result);
+    }
+  }
+
+
 }
