@@ -11,9 +11,9 @@ Use java 8
 ```
 
 #### Running the WebApp on http://localhost:8080
-
+This script runs the DataVault Web App in 'standalone' mode for testing Spring and Spring Security Configuration
 ```
-./mvnw spring-boot:run --projects datavault-webapp
+./runWebAppStandalone.sh
 ```
 
 #### Attempt to access a protected resource
