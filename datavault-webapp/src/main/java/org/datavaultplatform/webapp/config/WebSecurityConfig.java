@@ -58,12 +58,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
 
         .formLogin()
-        .loginPage("/auth/login")
-        .loginProcessingUrl("/auth/security_check")
-        .failureUrl("/auth/login?error=true")
-        .defaultSuccessUrl("/")
-        .successHandler(authenticationSuccess)
-        .and()
+          .loginPage("/auth/login")
+          .loginProcessingUrl("/auth/security_check")
+          .failureUrl("/auth/login?error=true")
+          .defaultSuccessUrl("/")
+          .successHandler(authenticationSuccess)
+          .and()
 
         .logout()
           .logoutUrl("/auth/logout")
@@ -71,15 +71,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .and()
 
         .exceptionHandling()
-        .accessDeniedPage("/auth/denied")
-        .and()
+          .accessDeniedPage("/auth/denied")
+          .and()
 
         .sessionManagement()
-        .maximumSessions(1)
-        .expiredUrl("/auth/login?security")
-        .sessionRegistry(sessionRegistry);
+          .maximumSessions(1)
+          .expiredUrl("/auth/login?security")
+          .sessionRegistry(sessionRegistry);
 
     if (csrfDisabled) {
+      // TODO - we only really want this for tests
       log.warn("CSRF PROTECTION DISABLED!!!!");
       http.csrf().disable();
     }
