@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DebugSpringSecurity
 public class SecurityAnnotationTest {
 
   private static String PREFIX = "/test/security/annotation";
