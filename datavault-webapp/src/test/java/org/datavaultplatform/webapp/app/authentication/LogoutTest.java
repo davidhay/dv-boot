@@ -80,7 +80,7 @@ public class LogoutTest {
 
   /*
    * GIVEN an authenticated user
-   * WHEN they logout
+   * WHEN they log out
    * THEN their session is invalidated
    * AND there is no SecurityContext in the session
    * AND they are redirected to /auth/confirmation
@@ -94,7 +94,6 @@ public class LogoutTest {
   /**
    * Tests that logout can still be accessed by someone who is not logged in
    *
-   * @throws Exception
    */
   @Test
   @WithAnonymousUser

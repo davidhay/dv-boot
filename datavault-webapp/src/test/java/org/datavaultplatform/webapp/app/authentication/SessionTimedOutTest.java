@@ -97,7 +97,7 @@ public class SessionTimedOutTest {
     checkLogoutNotified(sessionIdOne, 150);
     long diff = System.currentTimeMillis() - start;
     assertTrue(diff >= 60);
-    log.info("Took Tomcat [%d] to time session out - should have taken around 60",
+    log.info("Took Tomcat [{}] to time session out - should have taken around 60",
         TimeUnit.MILLISECONDS.toSeconds(diff));
   }
 

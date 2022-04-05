@@ -58,8 +58,7 @@ public class SecurityTagTest {
             get(PREFIX + "/basic"))
         .andReturn();
     assertEquals(HttpStatus.OK.value(),result.getResponse().getStatus());
-    Document doc = Jsoup.parse(result.getResponse().getContentAsString());
-    return doc;
+    return Jsoup.parse(result.getResponse().getContentAsString());
   }
 
   void checkForUsersSection(Document doc, boolean shouldExist){

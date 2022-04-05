@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 public class SecurityAnnotationTest {
 
-  private static String PREFIX = "/test/security/annotation";
+  private static final String PREFIX = "/test/security/annotation";
 
   @Autowired
   MockMvc mvc;
@@ -26,7 +26,6 @@ public class SecurityAnnotationTest {
   /**
    * This method just checks that the mock user works and controller sees the roles we specified.
    *
-   * @throws Exception
    */
   @Test
   @WithMockUser(roles = {"USER", "ADMIN"})

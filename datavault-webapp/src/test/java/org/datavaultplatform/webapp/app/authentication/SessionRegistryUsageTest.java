@@ -116,7 +116,7 @@ public class SessionRegistryUsageTest {
     checkNewLoginFailsOldConcurrentLoginIsExpired();
     checkLoggedInUserCanAccessSecurePage(sessionIdTwo, true);
 
-    //check that the 'previous' session is expired and redirected back to login
+    //check that the 'previous' session is expired and redirected back to the login page
     ResponseEntity<String> notOkay = checkLoggedInUserCanAccessSecurePage(sessionIdOne, false);
     assertEquals(notOkay.getStatusCode(), HttpStatus.FOUND);//REDIRECT
     assertEquals(TestUtils.getFullURI(port, "/auth/login?security"),

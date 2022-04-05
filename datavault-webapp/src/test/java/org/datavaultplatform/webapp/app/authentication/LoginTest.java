@@ -29,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -99,7 +100,7 @@ public class LoginTest {
       Set<String> actualGrantedAuthorityNames = ctx.getAuthentication()
           .getAuthorities()
           .stream()
-          .map(ga -> ga.getAuthority().toString())
+          .map(GrantedAuthority::getAuthority)
           .collect(Collectors.toSet());
 
       assertEquals(Collections.singleton("ROLE_USER"), actualGrantedAuthorityNames);

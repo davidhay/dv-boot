@@ -21,9 +21,7 @@ public class SecurityConfigTest {
   @Test
   void testEvaluatorWiring(ApplicationContext ctx) {
 
-    assertThrows(NoSuchBeanDefinitionException.class, () -> {
-      ctx.getBean(PermissionEvaluator.class);
-    });
+    assertThrows(NoSuchBeanDefinitionException.class, () -> ctx.getBean(PermissionEvaluator.class));
 
     assertTrue(expressionHandler instanceof DefaultWebSecurityExpressionHandler);
 
