@@ -7,7 +7,6 @@ import org.datavaultplatform.common.model.PermissionModel;
 import org.datavaultplatform.common.model.RoleAssignment;
 import org.datavaultplatform.common.model.RoleType;
 import org.datavaultplatform.webapp.model.AdminDashboardPermissionsModel;
-import org.datavaultplatform.webapp.services.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

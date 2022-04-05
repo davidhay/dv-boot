@@ -1,9 +1,8 @@
 package org.datavaultplatform.webapp.model;
 
+import java.util.Collection;
 import org.datavaultplatform.common.model.PermissionModel;
 import org.datavaultplatform.common.model.RoleModel;
-
-import java.util.Collection;
 
 public class RoleViewModel {
 

@@ -1,7 +1,6 @@
 package org.datavaultplatform.webapp.app.setup;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;

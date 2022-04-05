@@ -1,13 +1,12 @@
 package org.datavaultplatform.webapp.model;
 
-import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.common.model.VaultReview;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.common.model.VaultReview;
 
 
 @Slf4j

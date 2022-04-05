@@ -2,17 +2,14 @@ package org.datavaultplatform.webapp.model;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import org.datavaultplatform.common.model.Group;
-import org.datavaultplatform.common.model.Permission;
-import org.datavaultplatform.common.model.PermissionModel;
-import org.datavaultplatform.common.model.Vault;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.security.Principal;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.datavaultplatform.common.model.Permission;
+import org.datavaultplatform.common.model.PermissionModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AdminDashboardPermissionsModel {
 

@@ -1,19 +1,14 @@
 package org.datavaultplatform.webapp.app.authentication;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Field;
-import org.datavaultplatform.webapp.security.ScopedPermissionEvaluator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.PermissionEvaluator;
-import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
