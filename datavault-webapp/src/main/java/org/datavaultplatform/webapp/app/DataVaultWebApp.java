@@ -55,6 +55,6 @@ public class DataVaultWebApp implements CommandLineRunner {
     log.info("java.vendor [{}]",env.getProperty("java.vendor"));
     log.info("os.arch [{}]",env.getProperty("os.arch"));
     log.info("os.name [{}]",env.getProperty("os.name"));
-    log.info("active.profiles [{}]",env.getActiveProfiles());
+    log.info("active.profiles {}", (Object) env.getActiveProfiles());
   }
 }
