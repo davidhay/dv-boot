@@ -1,13 +1,17 @@
 package org.datavaultplatform.webapp.app.authentication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import org.datavaultplatform.webapp.security.ScopedPermissionEvaluator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
@@ -17,13 +21,19 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 public class SecurityConfigTest {
 
   @Autowired
-  PermissionEvaluator evaluator;
-
-  @Autowired
   SecurityExpressionHandler expressionHandler;
 
   @Test
-  void testEvaluatorWiring() throws NoSuchFieldException, IllegalAccessException {
+  void testEvaluatorWiring(ApplicationContext ctx) {
+
+    assertThrows(NoSuchBeanDefinitionException.class, () -> {
+      ctx.getBean(PermissionEvaluator.class);
+    });
+
+    assertTrue(expressionHandler instanceof DefaultWebSecurityExpressionHandler);
+
+    //PermissionEvaluator evaluator = ctx.getBean(PermissionEvaluator.class);
+    /*
     assertTrue(evaluator instanceof ScopedPermissionEvaluator);
     assertTrue(expressionHandler instanceof DefaultWebSecurityExpressionHandler);
     DefaultWebSecurityExpressionHandler def = (DefaultWebSecurityExpressionHandler) expressionHandler;
@@ -31,5 +41,6 @@ public class SecurityConfigTest {
     f.setAccessible(true);
     PermissionEvaluator actualEvaluator = (PermissionEvaluator)f.get(def);
     assertEquals(evaluator, actualEvaluator);
+     */
   }
 }

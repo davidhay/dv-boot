@@ -16,9 +16,11 @@ public class SecurityConfig {
     return new SessionRegistryImpl();
   }
 
+  /*
   @Bean
   public PermissionEvaluator permissionEvaluator(RestService restService){
     return new ScopedPermissionEvaluator(restService);
   }
+   */
 
 }

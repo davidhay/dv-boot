@@ -36,15 +36,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   AuthenticationSuccess authenticationSuccess;
 
-  @Autowired
-  PermissionEvaluator evaluator;
+  //@Autowired
+  //PermissionEvaluator evaluator;
 
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.debug(securityDebug);
-    web.expressionHandler(getHandler("web"));
+    //web.expressionHandler(getHandler("web"));
   }
 
+  /*
   private DefaultWebSecurityExpressionHandler getHandler(final String context){
     DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler(){
       @Override
@@ -55,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     handler.setPermissionEvaluator(evaluator);
     return handler;
   }
+   */
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -71,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers("/index*").permitAll() //TODO - this is temporary
 
           .antMatchers("/**").access("hasRole('ROLE_USER')") //OKAY
-          .expressionHandler(getHandler("http")) //TODO - do we need this ?
+          //.expressionHandler(getHandler("http")) //TODO - do we need this ?
           .and()
         .formLogin()
             .loginPage("/auth/login")
