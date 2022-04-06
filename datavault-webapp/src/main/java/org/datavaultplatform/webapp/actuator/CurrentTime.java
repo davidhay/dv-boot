@@ -14,8 +14,8 @@ public class CurrentTime {
   }
 
   @JsonAnyGetter
-    public Map<String, Object> getTimeDetails() {
-      return this.timeDetails;
-    }
+  public Map<String, Object> getTimeDetails() {
+    return this.timeDetails;
   }
+}
 
