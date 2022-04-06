@@ -6,34 +6,37 @@ import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.TestPropertySource;
 
+/* We override this property to test better.
+In the default config 'mail.administrator' has same value as 'mail.from',
+this is not great for testing.
+*/
+@TestPropertySource(properties = "mail.administrator=mail.admin@test.com")
 @SpringBootTest
 @Slf4j
-@TestPropertySource(properties = "mail.administrator=mail.admin@test.com")
 public class MailSetupTest {
 
   @Autowired
-  MailSender sender;
+  @Qualifier("mailSender")
+  JavaMailSenderImpl mailSender;
 
   @Autowired
-  SimpleMailMessage simpleMailMessage;
+  @Qualifier("templateMessage")
+  SimpleMailMessage templateMessage;
 
   @Test
   void testMailSenderConfig(){
-      assertThat(sender).isInstanceOf(JavaMailSenderImpl.class);
-      JavaMailSenderImpl impl = (JavaMailSenderImpl) sender;
 
-      assertThat(impl.getProtocol()).isEqualTo("smtp");
-      assertThat(impl.getHost()).isEqualTo("smtp.gmail.com");
-      assertThat(impl.getPort()).isEqualTo(587);
+      assertThat(mailSender.getProtocol()).isEqualTo("smtp");
+      assertThat(mailSender.getHost()).isEqualTo("smtp.gmail.com");
+      assertThat(mailSender.getPort()).isEqualTo(587);
 
-      Properties props = impl.getJavaMailProperties();
+      Properties props = mailSender.getJavaMailProperties();
       assertThat(props.getProperty("mail.smtp.auth")).isEqualTo("false");
       assertThat(props.getProperty("mail.smtp.starttls.enable")).isEqualTo("true");
       assertThat(props.getProperty("mail.smtp.quitwait")).isEqualTo("true");
@@ -42,11 +45,11 @@ public class MailSetupTest {
   }
 
   @Test
-  void testMailMessageConfigConfig() {
-    assertThat(simpleMailMessage.getSubject()).isEqualTo("DataVault feedback");
-    assertThat(simpleMailMessage.getFrom()).isEqualTo("feedback@datavaultplatform.org");
-    assertThat(simpleMailMessage.getTo().length).isOne();
-    assertThat(simpleMailMessage.getTo()[0]).isEqualTo("mail.admin@test.com");
+  void testMailMessageConfig() {
+    assertThat(templateMessage.getSubject()).isEqualTo("DataVault feedback");
+    assertThat(templateMessage.getFrom()).isEqualTo("feedback@datavaultplatform.org");
+    assertThat(templateMessage.getTo().length).isOne();
+    assertThat(templateMessage.getTo()[0]).isEqualTo("mail.admin@test.com");
   }
 
 }

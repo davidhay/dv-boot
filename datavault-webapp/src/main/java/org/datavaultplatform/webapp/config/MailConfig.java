@@ -35,7 +35,7 @@ public class MailConfig {
 
 
   @Bean
-  SimpleMailMessage simpleMailMessage() {
+  SimpleMailMessage templateMessage() {
     SimpleMailMessage result = new SimpleMailMessage();
     result.setTo(to);
     result.setFrom(from);
