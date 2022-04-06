@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers.test.fm;
+package org.datavaultplatform.webapp.controllers.standalone.fm;
 
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;

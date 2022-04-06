@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers.test.fm;
+package org.datavaultplatform.webapp.controllers.standalone.fm;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

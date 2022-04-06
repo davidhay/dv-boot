@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.datavaultplatform.webapp.controllers.test.api.SimulateErrorController;
+import org.datavaultplatform.webapp.controllers.standalone.api.SimulateErrorController;
 import org.datavaultplatform.webapp.model.test.EmailInfo;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;

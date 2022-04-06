@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers.test.api;
+package org.datavaultplatform.webapp.controllers.standalone.api;
 
 import java.time.Clock;
 import java.time.LocalDateTime;

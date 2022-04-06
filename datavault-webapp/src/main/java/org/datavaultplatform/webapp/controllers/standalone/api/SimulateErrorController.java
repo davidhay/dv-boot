@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers.test.api;
+package org.datavaultplatform.webapp.controllers.standalone.api;
 
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

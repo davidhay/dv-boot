@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 @SpringBootApplication
 @ComponentScan({
     "org.datavaultplatform.webapp.controllers.auth",
-    "org.datavaultplatform.webapp.controllers.test",
+    "org.datavaultplatform.webapp.controllers.standalone",
     "org.datavaultplatform.webapp.services"})
 @PropertySources({
     @PropertySource("classpath:application.properties"),
