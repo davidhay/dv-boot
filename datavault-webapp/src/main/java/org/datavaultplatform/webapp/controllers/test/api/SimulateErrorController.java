@@ -2,6 +2,7 @@ package org.datavaultplatform.webapp.controllers.test.api;
 
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.controllers.auth.ValidationExceptionHandler;
 import org.datavaultplatform.webapp.exception.EntityNotFoundException;
 import org.datavaultplatform.webapp.exception.ForbiddenException;
 import org.datavaultplatform.webapp.exception.InvalidUunException;
@@ -38,7 +39,7 @@ public class SimulateErrorController {
 
   /**
    * an invalid email address will cause a BindException to be handled by ValidationExceptionHandler
-   * @see org.datavaultplatform.webapp.controllers.ValidationExceptionHandler
+   * @see ValidationExceptionHandler
    */
   @PostMapping("/email")
   public EmailInfo email(@RequestBody @Valid EmailInfo info) {

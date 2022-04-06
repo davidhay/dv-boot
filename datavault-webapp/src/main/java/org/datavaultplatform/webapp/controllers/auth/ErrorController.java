@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers;
+package org.datavaultplatform.webapp.controllers.auth;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers;
+package org.datavaultplatform.webapp.controllers.auth;
 
 import java.util.List;
 import javax.servlet.http.HttpSession;

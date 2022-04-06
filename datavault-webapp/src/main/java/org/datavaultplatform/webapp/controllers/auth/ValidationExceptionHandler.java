@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers;
+package org.datavaultplatform.webapp.controllers.auth;
 
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;

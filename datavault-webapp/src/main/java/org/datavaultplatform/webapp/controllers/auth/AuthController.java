@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers;
+package org.datavaultplatform.webapp.controllers.auth;
 
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,6 @@ public class AuthController {
     private final String welcome;
     private final String logoutUrl;
 
-    /**
-    <bean id="authController" class="org.datavaultplatform.webapp.controllers.AuthController">
-        <property name="welcome" value="${webapp.welcome}"/>
-        <property name="logoutUrl" value="${webapp.logout.url:}"/>
-    </bean>
-    **/
     @Autowired
     public AuthController(
         @Value("${webapp.welcome}") String welcome,
