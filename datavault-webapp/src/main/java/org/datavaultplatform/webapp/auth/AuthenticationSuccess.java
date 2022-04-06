@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.controllers.authentication;
+package org.datavaultplatform.webapp.auth;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -12,10 +12,8 @@ import org.datavaultplatform.webapp.services.NotifyLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class AuthenticationSuccess extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private final NotifyLoginService service;

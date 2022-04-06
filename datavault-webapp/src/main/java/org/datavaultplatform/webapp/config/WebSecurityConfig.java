@@ -1,7 +1,7 @@
 package org.datavaultplatform.webapp.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.webapp.controllers.authentication.AuthenticationSuccess;
+import org.datavaultplatform.webapp.auth.AuthenticationSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
