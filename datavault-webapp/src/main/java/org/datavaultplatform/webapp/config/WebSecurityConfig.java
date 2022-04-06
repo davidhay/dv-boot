@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.auth.AuthenticationSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 @EnableWebSecurity
 @Slf4j
@@ -29,27 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   AuthenticationSuccess authenticationSuccess;
 
-  //@Autowired
-  //PermissionEvaluator evaluator;
-
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.debug(securityDebug);
-    //web.expressionHandler(getHandler("web"));
+    //TODO - do we need to do this?
+    //web.expressionHandler(expressionHandler);
   }
 
-  /*
-  private DefaultWebSecurityExpressionHandler getHandler(final String context){
-    DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler(){
-      @Override
-      public String toString(){
-        return context + ":" + super.toString();
-      }
-    };
-    handler.setPermissionEvaluator(evaluator);
-    return handler;
-  }
-   */
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -117,7 +105,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //TODO : double check whether this has to come last
         .antMatchers("/**").access("hasRole('ROLE_USER')"); //OKAY
 
-        //.expressionHandler(getHandler("http")) //TODO - do we need this ?
+      //TODO - do we need to do this?
+      //.expressionHandler(expressionHandler);
   }
 
 }

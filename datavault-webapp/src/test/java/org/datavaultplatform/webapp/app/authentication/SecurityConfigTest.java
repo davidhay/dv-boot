@@ -1,16 +1,16 @@
 package org.datavaultplatform.webapp.app.authentication;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.lang.reflect.Field;
+import lombok.SneakyThrows;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.PermissionEvaluator;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 @SpringBootTest
@@ -18,24 +18,19 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 public class SecurityConfigTest {
 
   @Autowired
-  SecurityExpressionHandler expressionHandler;
+  @Qualifier("webSecurityExpressionHandler")
+  DefaultWebSecurityExpressionHandler expressionHandler;
+
+  @Autowired
+  @Qualifier("permissionEvaluator")
+  PermissionEvaluator permissionEvaluator;
 
   @Test
-  void testEvaluatorWiring(ApplicationContext ctx) {
-
-    assertThrows(NoSuchBeanDefinitionException.class, () -> ctx.getBean(PermissionEvaluator.class));
-
-    assertTrue(expressionHandler instanceof DefaultWebSecurityExpressionHandler);
-
-    //PermissionEvaluator evaluator = ctx.getBean(PermissionEvaluator.class);
-    /*
-    assertTrue(evaluator instanceof ScopedPermissionEvaluator);
-    assertTrue(expressionHandler instanceof DefaultWebSecurityExpressionHandler);
-    DefaultWebSecurityExpressionHandler def = (DefaultWebSecurityExpressionHandler) expressionHandler;
+  @SneakyThrows
+  void testEvaluatorWiring() {
     Field f = AbstractSecurityExpressionHandler.class.getDeclaredField("permissionEvaluator");
     f.setAccessible(true);
-    PermissionEvaluator actualEvaluator = (PermissionEvaluator)f.get(def);
-    assertEquals(evaluator, actualEvaluator);
-     */
+    PermissionEvaluator actualEvaluator = (PermissionEvaluator)f.get(expressionHandler);
+    assertEquals(permissionEvaluator, actualEvaluator);
   }
 }
