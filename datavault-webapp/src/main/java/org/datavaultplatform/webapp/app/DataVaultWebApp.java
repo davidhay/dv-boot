@@ -4,6 +4,7 @@ import static java.util.Collections.singletonList;
 
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.config.ActutatorConfig;
+import org.datavaultplatform.webapp.config.LdapConfig;
 import org.datavaultplatform.webapp.config.MailConfig;
 import org.datavaultplatform.webapp.config.MvcConfig;
 import org.datavaultplatform.webapp.config.PrivilegeEvaluatorConfig;
@@ -31,7 +32,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
     @PropertySource("classpath:datavault.properties")
 })
 @Import({WebConfig.class, MvcConfig.class, PrivilegeEvaluatorConfig.class, ActutatorConfig.class,
-    SecurityConfig.class, WebSecurityConfig.class, MailConfig.class})
+    SecurityConfig.class, WebSecurityConfig.class, MailConfig.class, LdapConfig.class})
 @Slf4j
 public class DataVaultWebApp implements CommandLineRunner {
 

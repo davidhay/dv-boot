@@ -3,6 +3,7 @@ package org.datavaultplatform.webapp.app.authentication;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 @SpringBootTest
+@AddTestProperties
 public class SecurityConfigTest {
 
   @Autowired
