@@ -12,3 +12,10 @@ PATH, ROLE
 /admin/vaults/ , ROLE_ADMIN_VAULTS
 /admin/reviews/ , ROLE_ADMIN_REVIEWS
 /welcome , ROLE_USER
+/resources/favicon.ico,
+/actuator/info,
+/actuator/health,
+/actuator/customtime,
+/auth/login,
+/auth/confirmation,
+/auth/denied,

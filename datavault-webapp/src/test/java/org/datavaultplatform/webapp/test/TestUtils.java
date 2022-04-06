@@ -106,5 +106,8 @@ public abstract class TestUtils {
         .until(ready);
   }
 
+  public static String stripPrefix(String prefix, String value){
+    return value.replaceFirst("^"+prefix,"");
+  }
 
 }
