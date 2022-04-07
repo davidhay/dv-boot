@@ -14,6 +14,7 @@ import java.util.Map;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -70,47 +71,44 @@ class PermissionEvaluatorTest {
   class Secure {
 
     @SneakyThrows
-    MvcResult getInfoName(String id) {
-      return mvc.perform(get("/test/info/secure/" + id))
+    MvcResult getPathOne(String id) {
+      return mvc.perform(get("/test/info/secure/one/" + id))
           .andReturn();
     }
 
-    void checkNotAuthenticated() {
-      MvcResult result = getInfoName("1");
+    void checkNotAuthenticatedPathOne() {
+      MvcResult result = getPathOne("1");
       assertEquals(HttpStatus.FOUND.value(), result.getResponse().getStatus());
       assertEquals("http://localhost/auth/login", result.getResponse().getRedirectedUrl());
     }
 
     @SneakyThrows
-    void checkAllowed() {
-      MvcResult result = getInfoName("1");
+    void checkAllowedPathOne() {
+      MvcResult result = getPathOne("1");
       assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
       assertEquals("info_one", result.getResponse().getContentAsString());
     }
 
     @Test
-    void testNotAuthenticatedOne() {
-      checkNotAuthenticated();
+    void testNotAuthenticatedNoUser() {
+      checkNotAuthenticatedPathOne();
     }
 
     @Test
     @WithAnonymousUser
-    void testNotAuthenticatedTwo() {
-      checkNotAuthenticated();
+    void testNotAuthenticatedAnonUser() {
+      checkNotAuthenticatedPathOne();
     }
 
+    /**
+     * Contains tests for both the 3 and 4 arg version of PermissionEvaluator.hasPermission
+     */
     @Nested
     @WithMockUser(username = "testuser", password = "testpassword")
     class UsingPermissionEvaluator {
 
       @Captor
       ArgumentCaptor<Authentication> argAuth;
-
-      @Captor
-      ArgumentCaptor<Serializable> argTargetId;
-
-      @Captor
-      ArgumentCaptor<String> argTargetType;
 
       @Captor
       ArgumentCaptor<Object> argPermission;
@@ -120,69 +118,161 @@ class PermissionEvaluatorTest {
         Mockito.reset(mPermissionEvaluator);
       }
 
-      @Test
-      void testAllowed() {
-
-        //setup the mock permission evaluator to return true
-        setupEvaluator(true);
-
-        //invoke the endpoint - should invoke permission evaluator - and be allowed
-        checkAllowed();
-
-        checkEvaluatorWasCalledWithExpectedArgs();
-
+      @AfterEach
+      void verifyNoMoreCalls() {
         //verify no more calls to permission evaluator
         verifyNoMoreInteractions(mPermissionEvaluator);
       }
 
-      @Test
-      void testDenied() {
+      /**
+       * Checks that the PermissionEvaluator.hasPermission with 3 args is called as expected.
+       */
+      @Nested
+      class PathOneUsesHasPersmissionFourArgs {
 
-        //setup the mock permission evaluator to return true
-        setupEvaluator(false);
+        @Captor
+        ArgumentCaptor<Serializable> argTargetId;
 
-        //invoke the endpoint - should invoke permission evaluator - and be denied
-        checkDenied();
+        @Captor
+        ArgumentCaptor<String> argTargetType;
 
-        checkEvaluatorWasCalledWithExpectedArgs();
+        void checkDeniedOne() {
+          MvcResult result = getPathOne("1");
+          assertEquals("/auth/denied", result.getResponse().getForwardedUrl());
+          assertEquals(HttpStatus.FORBIDDEN.value(), result.getResponse().getStatus());
+        }
 
-        //verify no more calls to permission evaluator
-        verifyNoMoreInteractions(mPermissionEvaluator);
+        @Test
+        void testEvaluatorAllows() {
+
+          //setup the mock permission evaluator to return true
+          setupEvaluator(true);
+
+          //invoke the endpoint - should invoke permission evaluator - and be allowed
+          checkAllowedPathOne();
+
+          checkEvaluatorWasCalledWithExpectedArgs();
+
+        }
+
+        @Test
+        void testEvaluatorDenies() {
+
+          //setup the mock permission evaluator to return true
+          setupEvaluator(false);
+
+          //invoke the endpoint - should invoke permission evaluator - and be denied
+          checkDeniedOne();
+
+          checkEvaluatorWasCalledWithExpectedArgs();
+
+          //verify no more calls to permission evaluator
+          verifyNoMoreInteractions(mPermissionEvaluator);
+        }
+
+        void setupEvaluator(boolean evaluatorResult) {
+          when(mPermissionEvaluator.hasPermission(
+              argAuth.capture(),
+              argTargetId.capture(),
+              argTargetType.capture(),
+              argPermission.capture())).thenReturn(evaluatorResult);
+        }
+
+        private void checkEvaluatorWasCalledWithExpectedArgs() {
+          assertEquals("testuser", argAuth.getValue().getName());
+          assertEquals(Integer.valueOf(1), argTargetId.getValue());
+
+          assertEquals("java.lang.String", argTargetType.getValue());
+
+          assertEquals("READ", argPermission.getValue());
+
+          verify(mPermissionEvaluator).hasPermission(
+              argAuth.getValue(),
+              argTargetId.getValue(),
+              argTargetType.getValue(),
+              argPermission.getValue());
+        }
       }
 
-      void checkDenied() {
-        MvcResult result = getInfoName("1");
-        assertEquals("/auth/denied", result.getResponse().getForwardedUrl());
-        assertEquals(HttpStatus.FORBIDDEN.value(), result.getResponse().getStatus());
-      }
+      /**
+       * Checks that the PermissionEvaluator.hasPermission with 3 args is called as expected.
+       */
+      @Nested
+      class PathTwoUsesHasPermissionThreeArgs {
 
-      void setupEvaluator(boolean evalautorResult) {
-        when(mPermissionEvaluator.hasPermission(
-            argAuth.capture(),
-            argTargetId.capture(),
-            argTargetType.capture(),
-            argPermission.capture())).thenReturn(evalautorResult);
-      }
+        @SneakyThrows
+        MvcResult getPathTwo() {
+          return mvc.perform(get("/test/info/secure/two/exampleDomainObj"))
+              .andReturn();
+        }
 
-      private void checkEvaluatorWasCalledWithExpectedArgs() {
-        assertEquals("testuser", argAuth.getValue().getName());
-        assertEquals(Integer.valueOf(1), argTargetId.getValue());
+        @SneakyThrows
+        void checkAllowedPathTwo() {
+          MvcResult result = getPathTwo();
+          assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+          assertEquals("result-exampleDomainObj", result.getResponse().getContentAsString());
+        }
 
-        assertEquals("java.lang.String", argTargetType.getValue());
+        @Captor
+        ArgumentCaptor<Object> argTargetDomainObject;
 
-        assertEquals("READ", argPermission.getValue());
+        void checkDenied() {
+          MvcResult result = getPathTwo();
+          assertEquals("/auth/denied", result.getResponse().getForwardedUrl());
+          assertEquals(HttpStatus.FORBIDDEN.value(), result.getResponse().getStatus());
+        }
 
-        verify(mPermissionEvaluator).hasPermission(
-            argAuth.getValue(),
-            argTargetId.getValue(),
-            argTargetType.getValue(),
-            argPermission.getValue());
+        @Test
+        void testEvaluatorAllows() {
+
+          //setup the mock permission evaluator to return true
+          setupEvaluator(true);
+
+          //invoke the endpoint - should invoke permission evaluator - and be allowed
+          checkAllowedPathTwo();
+
+          checkEvaluatorWasCalledWithExpectedArgs();
+
+        }
+
+        @Test
+        void testEvaluatorDenies() {
+
+          //setup the mock permission evaluator to return true
+          setupEvaluator(false);
+
+          //invoke the endpoint - should invoke permission evaluator - and be denied
+          checkDenied();
+
+          checkEvaluatorWasCalledWithExpectedArgs();
+
+          //verify no more calls to permission evaluator
+          verifyNoMoreInteractions(mPermissionEvaluator);
+        }
+
+        void setupEvaluator(boolean evaluatorResult) {
+          when(mPermissionEvaluator.hasPermission(
+              argAuth.capture(),
+              argTargetDomainObject.capture(),
+              argPermission.capture())).thenReturn(evaluatorResult);
+        }
+
+        private void checkEvaluatorWasCalledWithExpectedArgs() {
+          assertEquals("testuser", argAuth.getValue().getName());
+          assertEquals("exampleDomainObj", argTargetDomainObject.getValue());
+          assertEquals("PERMISSION_ONE", argPermission.getValue());
+
+          verify(mPermissionEvaluator).hasPermission(
+              argAuth.getValue(),
+              argTargetDomainObject.getValue(),
+              argPermission.getValue());
+        }
       }
     }
   }
 
   /**
-   * This TestConfig class adds the InfoController for this test.
+   * Configures the InfoController for this test.
    */
   @TestConfiguration
   static class TestConfig {
@@ -191,9 +281,14 @@ class PermissionEvaluatorTest {
     InfoController infoController() {
       return new InfoController();
     }
-
   }
 
+  /**
+   * A controller that uses both 2 and 3 arg version of hasPermission in @PreAuthorize annotation.
+   * These should result in calls to 3 and 4 arg version of
+   * PermissionEvaluator bean's hasPermission methods.
+   * Spring adds Authentication as first arg in both hasPermission method calls.
+   */
   @RestController
   @RequestMapping("/test/info")
   static class InfoController {
@@ -210,9 +305,15 @@ class PermissionEvaluatorTest {
     }
 
     @PreAuthorize("isAuthenticated() and hasPermission(#id,'java.lang.String','READ')")
-    @GetMapping("/secure/{id}")
-    String getInfoSecure(@PathVariable int id) {
+    @GetMapping("/secure/one/{id}")
+    String getInfoSecureOne(@PathVariable int id) {
       return info.get(id);
+    }
+
+    @GetMapping("/secure/two/{domain}")
+    @PreAuthorize("isAuthenticated() and hasPermission(#domain,'PERMISSION_ONE')")
+    String getInfoSecureTwo(@PathVariable String domain) {
+      return "result-"+domain;
     }
   }
 }
