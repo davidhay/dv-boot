@@ -46,8 +46,15 @@ import org.springframework.web.bind.annotation.RestController;
 @AddTestProperties
 @AutoConfigureMockMvc
 @Slf4j
-class PermissionEvaluatorTest {
-
+/**
+ * Checks that the SpringSecurity @PreAuthorization annotation in Java code
+ * will delegate to the registered PermissionEvaluator bean when the annotation
+ * uses hasPermission.
+ * This test uses a mock PermissionEvaluator bean - we are not testing
+ * the actual PermissionEvaluator - just that it gets called correctly.
+ */
+class PermissionEvaluatorPreAuthorizeTest {
+  
   @Autowired
   MockMvc mvc;
 
