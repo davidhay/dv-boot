@@ -1,7 +1,6 @@
 package org.datavaultplatform.webapp.config;
 
 import java.util.Properties;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;

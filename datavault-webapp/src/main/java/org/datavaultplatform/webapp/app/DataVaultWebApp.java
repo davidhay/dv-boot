@@ -10,6 +10,7 @@ import org.datavaultplatform.webapp.config.MvcConfig;
 import org.datavaultplatform.webapp.config.SecurityConfig;
 import org.datavaultplatform.webapp.config.WebConfig;
 import org.datavaultplatform.webapp.config.WebSecurityConfig;
+import org.datavaultplatform.webapp.config.shib.ShibProfileConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -32,7 +33,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
     @PropertySource("classpath:datavault.properties")
 })
 @Import({WebConfig.class, MvcConfig.class, ActutatorConfig.class,
-    SecurityConfig.class, WebSecurityConfig.class, MailConfig.class, LdapConfig.class})
+    SecurityConfig.class, WebSecurityConfig.class, MailConfig.class, LdapConfig.class,
+    ShibProfileConfig.class})
 @Slf4j
 public class DataVaultWebApp implements CommandLineRunner {
 
