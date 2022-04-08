@@ -3,6 +3,7 @@ package org.datavaultplatform.webapp.app.authentication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Nested;
@@ -10,10 +11,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -133,5 +142,36 @@ public class SecurityAnnotationTest {
     }
   }
 
+  @RestController
+  @TestConfiguration
+  @RequestMapping("/test/security/annotation/")
+  static class TestControllerConfig {
 
+    @GetMapping(value = "/auth/roles")
+    public String getAuthRoles(Authentication auth){
+      return auth.getAuthorities()
+          .stream()
+          .map(GrantedAuthority::getAuthority)
+          .sorted()
+          .collect(Collectors.joining(":"));
+    }
+
+    @GetMapping(value = "/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getForAdminOnly(){
+      return "isAdmin";
+    }
+
+    @GetMapping(value = "/user")
+    @PreAuthorize("hasRole('USER')")
+    public String getForUserOnly(){
+      return "isUser";
+    }
+
+    @GetMapping(value = "/admin/secured")
+    @Secured("ROLE_ADMIN")
+    public String getSecuredForAdminOnly(){
+      return "isAdmin@Secured";
+    }
+  }
 }

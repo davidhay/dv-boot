@@ -13,10 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.stereotype.Controller;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -78,6 +82,17 @@ public class SecurityTagTest {
       assertEquals("DIV FOR ADMINS", element.text());
     }else{
       assertNull(element);
+    }
+  }
+
+  @TestConfiguration
+  @Controller
+  @RequestMapping("/test/security/tag/")
+  static class SecurityTagController {
+
+    @GetMapping(value = "/basic")
+    public String getTestPageForBasicSecurityTags() {
+      return "test/securityTagBasic";
     }
   }
 

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -80,7 +78,6 @@ public class ProtectedPathsTest {
     mvc.perform(formLogin("/auth/security_check")
         .user("testuser")
         .password("testpassword"))
-        .andDo(print())
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/"));
   }
@@ -136,21 +133,12 @@ public class ProtectedPathsTest {
     assertEquals(HttpStatus.FORBIDDEN.value(), result.getResponse().getStatus());
   }
 
-
   /**
    * In standalone profile, we have paths mapped to roles but, the controllers associated with those
    * paths are not registered. This class registers a controller for /admin/** and /welcome paths.
    * This allows us to test path protections.
    */
   @TestConfiguration
-  static class TestConfig {
-
-    @Bean
-    ProtectedPathsController testController() {
-      return new ProtectedPathsController();
-    }
-  }
-
   @RestController
   static class ProtectedPathsController {
 

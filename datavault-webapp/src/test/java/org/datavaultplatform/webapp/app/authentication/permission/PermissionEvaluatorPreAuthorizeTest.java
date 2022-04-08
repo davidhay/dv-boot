@@ -28,7 +28,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -279,24 +278,13 @@ class PermissionEvaluatorPreAuthorizeTest {
   }
 
   /**
-   * Configures the InfoController for this test.
-   */
-  @TestConfiguration
-  static class TestConfig {
-
-    @Bean
-    InfoController infoController() {
-      return new InfoController();
-    }
-  }
-
-  /**
    * A controller that uses both 2 and 3 arg version of hasPermission in @PreAuthorize annotation.
    * These should result in calls to 3 and 4 arg version of
    * PermissionEvaluator bean's hasPermission methods.
    * Spring adds Authentication as first arg in both hasPermission method calls.
    */
   @RestController
+  @TestConfiguration
   @RequestMapping("/test/info")
   static class InfoController {
 
