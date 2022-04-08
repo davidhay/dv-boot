@@ -1,6 +1,7 @@
 package org.datavaultplatform.webapp.config.shib;
 
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationFilter;
 import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 @EnableWebSecurity
 @Slf4j
@@ -31,6 +33,9 @@ public class ShibWebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   Http403ForbiddenEntryPoint http403EntryPoint;
 
+  @Autowired
+  ShibAuthenticationFilter filter;
+
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.debug(securityDebug);
@@ -39,8 +44,8 @@ public class ShibWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    //http.addFilterBefore(
-    //    new CustomFilter(), BasicAuthenticationFilter.class);
+
+    http.addFilterAt(filter, AbstractPreAuthenticatedProcessingFilter.class);
 
     authorizeRequests(http)
         .and()
