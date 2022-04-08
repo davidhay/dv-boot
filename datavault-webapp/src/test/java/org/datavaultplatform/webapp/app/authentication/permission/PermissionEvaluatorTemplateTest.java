@@ -41,6 +41,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AddTestProperties
 @AutoConfigureMockMvc
 @Slf4j
+/**
+ * Checks that the SpringSecurity authorize Jsp Tag in freemarker templates
+ * will delegate to the registered PermissionEvaluator bean when the authorize tag
+ * uses hasPermission.
+ * This test uses a mock PermissionEvaluator bean - we are not testing
+ * the actual PermissionEvaluator - just that it gets called correctly.
+ * For Example :
+ * '
+ *  <#assign secExpression = "hasPermission('${targetId}', 'vault', 'VIEW_DEPOSITS_AND_RETRIEVES')">
+ *  <@sec.authorize access=secExpression>
+ * '
+ */
 class PermissionEvaluatorTemplateTest {
 
   @Autowired
