@@ -7,6 +7,7 @@ import org.datavaultplatform.webapp.config.ActutatorConfig;
 import org.datavaultplatform.webapp.config.LdapConfig;
 import org.datavaultplatform.webapp.config.MailConfig;
 import org.datavaultplatform.webapp.config.MvcConfig;
+import org.datavaultplatform.webapp.config.PropertiesConfig;
 import org.datavaultplatform.webapp.config.SecurityConfig;
 import org.datavaultplatform.webapp.config.WebConfig;
 import org.datavaultplatform.webapp.config.WebSecurityConfig;
@@ -18,8 +19,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
@@ -28,11 +27,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
     "org.datavaultplatform.webapp.controllers.auth",
     "org.datavaultplatform.webapp.controllers.standalone",
     "org.datavaultplatform.webapp.services"})
-@PropertySources({
-    @PropertySource("classpath:application.properties"),
-    @PropertySource("classpath:datavault.properties")
-})
-@Import({WebConfig.class, MvcConfig.class, ActutatorConfig.class,
+@Import({PropertiesConfig.class, WebConfig.class, MvcConfig.class, ActutatorConfig.class,
     SecurityConfig.class, WebSecurityConfig.class, MailConfig.class, LdapConfig.class,
     ShibProfileConfig.class})
 @Slf4j
