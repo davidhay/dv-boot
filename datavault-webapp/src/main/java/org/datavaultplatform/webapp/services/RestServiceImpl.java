@@ -44,6 +44,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -70,7 +71,7 @@ public class RestServiceImpl implements RestService {
         this.brokerApiKey = brokerApiKey;
     }
 
-    private <T> HttpEntity<T> exchange(String url, Class<T> clazz, HttpMethod method, Object payload) {
+    private <T> ResponseEntity<T> exchange(String url, Class<T> clazz, HttpMethod method, Object payload) {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -99,7 +100,6 @@ public class RestServiceImpl implements RestService {
         }
 
         logger.debug("Calling Broker with url:" + url + " Method:" + method);
-        System.out.println("Calling Broker with url:" + url + " Method:" + method);
 
         // todo : check the http status code before returning?
 
@@ -108,22 +108,22 @@ public class RestServiceImpl implements RestService {
     }
 
     @Override
-    public <T> HttpEntity<T> get(String url, Class<T> clazz) {
+    public <T> ResponseEntity<T> get(String url, Class<T> clazz) {
         return exchange(url, clazz, HttpMethod.GET, null);
     }
 
     @Override
-    public <T> HttpEntity<T> put(String url, Class<T> clazz, Object payload) {
+    public <T> ResponseEntity<T> put(String url, Class<T> clazz, Object payload) {
         return exchange(url, clazz, HttpMethod.PUT, payload);
     }
 
     @Override
-    public <T> HttpEntity<T> post(String url, Class<T> clazz, Object payload) {
+    public <T> ResponseEntity<T> post(String url, Class<T> clazz, Object payload) {
         return exchange(url, clazz, HttpMethod.POST, payload);
     }
 
     @Override
-    public HttpEntity<?> delete(String url, Class clazz) {
+    public <T> ResponseEntity<T> delete(String url, Class<T> clazz) {
         return exchange(url, clazz, HttpMethod.DELETE, null);
     }
 
@@ -131,36 +131,33 @@ public class RestServiceImpl implements RestService {
 
     @Override
     public FileStore[] getFileStoreListing() {
-        HttpEntity<?> response = get(brokerURL + "/filestores", FileStore[].class);
-        return (FileStore[])response.getBody();
+        ResponseEntity<FileStore[]> response = get(brokerURL + "/filestores", FileStore[].class);
+        return response.getBody();
     }
 
     @Override
     public FileStore[] getFileStoresLocal() {
-        HttpEntity<?> response = get(brokerURL + "/filestores/local", FileStore[].class);
-        return (FileStore[])response.getBody();
+        ResponseEntity<FileStore[]> response = get(brokerURL + "/filestores/local", FileStore[].class);
+        return response.getBody();
     }
 
     @Override
     public FileStore[] getFileStoresSFTP() {
-        HttpEntity<?> response = get(brokerURL + "/filestores/sftp", FileStore[].class);
-        return (FileStore[])response.getBody();
+        ResponseEntity<FileStore[]> response = get(brokerURL + "/filestores/sftp", FileStore[].class);
+        return response.getBody();
     }
 
     @Override
     public ArchiveStore[] getArchiveStores() {
-        HttpEntity<?> response = get(brokerURL + "/admin/archivestores", ArchiveStore[].class);
-        return (ArchiveStore[])response.getBody();
+        ResponseEntity<ArchiveStore[]> response = get(brokerURL + "/admin/archivestores", ArchiveStore[].class);
+        return response.getBody();
     }
 
     @Override
     public ArchiveStore getArchiveStore(String archiveStoreID) {
-        HttpEntity<?> response = get(brokerURL + "/admin/archivestores/" + archiveStoreID, ArchiveStore.class);
-        return (ArchiveStore)response.getBody();
+        ResponseEntity<ArchiveStore> response = get(brokerURL + "/admin/archivestores/" + archiveStoreID, ArchiveStore.class);
+        return response.getBody();
     }
-
-
-
 
     @Override
     public FileInfo[] getFilesListing(String filePath) {
@@ -169,8 +166,9 @@ public class RestServiceImpl implements RestService {
             filePath = "/" + filePath;
         }
 
-        HttpEntity<?> response = get(brokerURL + "/files" + filePath, FileInfo[].class);
-        return (FileInfo[])response.getBody();
+        ResponseEntity<FileInfo[]> response = get(brokerURL + "/files" + filePath,
+            FileInfo[].class);
+        return response.getBody();
     }
 
     @Override
@@ -180,8 +178,8 @@ public class RestServiceImpl implements RestService {
             filePath = "/" + filePath;
         }
 
-        HttpEntity<?> response = get(brokerURL + "/filesize" + filePath, String.class);
-        return (String)response.getBody();
+        ResponseEntity<String> response = get(brokerURL + "/filesize" + filePath, String.class);
+        return response.getBody();
     }
 
     @Override
@@ -197,368 +195,403 @@ public class RestServiceImpl implements RestService {
             parameters += "filepath=" + filePath + "&";
         }
 
-        System.out.println("parameters: " + parameters);
+        logger.debug("parameters: " + parameters);
 
-        HttpEntity<?> response = get(brokerURL + "/checkdepositsize" + parameters, DepositSize.class);
+        ResponseEntity<DepositSize> response = get(brokerURL + "/checkdepositsize" + parameters, DepositSize.class);
 
-        System.out.println("return: " + response.getBody());
+        logger.debug("return: " + response.getBody());
 
-        return (DepositSize) response.getBody();
+        return response.getBody();
     }
 
     @Override
     public VaultInfo[] getVaultsListing() {
-        HttpEntity<?> response = get(brokerURL + "/vaults", VaultInfo[].class);
-        return (VaultInfo[])response.getBody();
+        ResponseEntity<VaultInfo[]> response = get(brokerURL + "/vaults", VaultInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo[] getVaultsListingForGroup(String groupID) {
-        HttpEntity<?> response = get(brokerURL + "/groups/" + groupID + "/vaults", VaultInfo[].class);
-        return (VaultInfo[])response.getBody();
+        ResponseEntity<VaultInfo[]> response = get(brokerURL + "/groups/" + groupID + "/vaults", VaultInfo[].class);
+        return response.getBody();
     }
     @Override
     public VaultInfo[] getVaultsListingAll(String userID) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/user?userID=" + userID, VaultInfo[].class);
-        return (VaultInfo[])response.getBody();
+        ResponseEntity<VaultInfo[]> response = get(brokerURL + "/vaults/user?userID=" + userID, VaultInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public BillingInformation getVaultBillingInfo(String vaultId) {
-        HttpEntity<?> response = get(brokerURL + "/admin/billing/" + vaultId , BillingInformation.class);
-        return (BillingInformation)response.getBody();
+        ResponseEntity<BillingInformation> response = get(brokerURL + "/admin/billing/" + vaultId , BillingInformation.class);
+        return response.getBody();
     }
 
     @Override
     public VaultsData getVaultsListingAll(String sort, String order, int offset, int maxResult) {
-        HttpEntity<?> response = get(brokerURL + "/admin/vaults?sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, VaultsData.class);
-        return (VaultsData)response.getBody();
+        ResponseEntity<VaultsData> response = get(brokerURL + "/admin/vaults?sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, VaultsData.class);
+        return response.getBody();
     }
 
     @Override
     public VaultsData getVaultsForReview() {
-        HttpEntity<?> response = get(brokerURL + "/admin/vaultsForReview", VaultsData.class);
-        return (VaultsData) response.getBody();
+        ResponseEntity<VaultsData> response = get(brokerURL + "/admin/vaultsForReview", VaultsData.class);
+        return response.getBody();
     }
 
     @Override
     public ReviewInfo[] getReviewsListing(String vaultId) {
-        HttpEntity<?> response = get(brokerURL +"/vaults/" + vaultId + "/vaultreviews", ReviewInfo[].class);
-        return (ReviewInfo[])response.getBody();
+        ResponseEntity<ReviewInfo[]> response = get(brokerURL +"/vaults/" + vaultId + "/vaultreviews", ReviewInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public ReviewInfo getCurrentReview(String vaultId) {
-        HttpEntity<?> response = get(brokerURL +"/admin/vaults/" + vaultId + "/vaultreviews/current", ReviewInfo.class);
-        return (ReviewInfo)response.getBody();
+        ResponseEntity<ReviewInfo> response = get(brokerURL +"/admin/vaults/" + vaultId + "/vaultreviews/current", ReviewInfo.class);
+        return response.getBody();
 
     }
 
     @Override
     public VaultReview getVaultReview(String vaultReviewId) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/vaultreviews/" + vaultReviewId, VaultReview.class);
-        return (VaultReview)response.getBody();
+        ResponseEntity<VaultReview> response = get(brokerURL + "/vaults/vaultreviews/" + vaultReviewId, VaultReview.class);
+        return response.getBody();
     }
 
     @Override
     public DepositReview getDepositReview(String depositReviewId) {
-        HttpEntity<?> response = get(brokerURL +"/vaultreviews/depositreviews/" +  depositReviewId, DepositReview.class);
-        return (DepositReview)response.getBody();
+        ResponseEntity<DepositReview> response = get(brokerURL +"/vaultreviews/depositreviews/" +  depositReviewId, DepositReview.class);
+        return response.getBody();
     }
 
     @Override
     public VaultsData searchVaultsForBilling(String query, String sort, String order, int offset,
         int maxResult) {
-        HttpEntity<?> response = get(brokerURL + "/admin/billing/search?query=" + query + "&sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, VaultsData.class);
-        return (VaultsData)response.getBody();
+        ResponseEntity<VaultsData> response = get(brokerURL + "/admin/billing/search?query=" + query + "&sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, VaultsData.class);
+        return response.getBody();
     }
 
     @Override
     public VaultsData searchVaults(String query, String sort, String order, int offset,
         int maxResult) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/search?query=" + query + "&sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, VaultsData.class);
-        return (VaultsData)response.getBody();
+        ResponseEntity<VaultsData> response = get(brokerURL + "/vaults/search?query=" + query + "&sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, VaultsData.class);
+        return response.getBody();
     }
 
     @Override
     public int getVaultsCount() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/count", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/statistics/count", Integer.class);
+        return response.getBody();
     }
 
     @Override
     public Long getVaultsSize() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/size", Long.class);
-        return (Long)response.getBody();
+        ResponseEntity<Long> response = get(brokerURL + "/statistics/size", Long.class);
+        return response.getBody();
     }
 
     @Override
     public int getDepositsCount() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/depositcount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/statistics/depositcount",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public int getDepositsQueue() {
-        HttpEntity<?> response = get(brokerURL + "/vaults/depositqueuecount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/vaults/depositqueuecount",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public int getDepositsInProgressCount() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/depositinprogresscount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/statistics/depositinprogresscount",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public Deposit[] getDepositsInProgress() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/depositinprogress", Deposit[].class);
-        return (Deposit[])response.getBody();
+        ResponseEntity<Deposit[]> response = get(brokerURL + "/statistics/depositinprogress",
+            Deposit[].class);
+        return response.getBody();
     }
     @Override
     public DepositInfo[] searchDepositsQuery(String query) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/deposits/search/Query?query=" + query, DepositInfo[].class);
-        return (DepositInfo[])response.getBody();
+        ResponseEntity<DepositInfo[]> response = get(
+            brokerURL + "/vaults/deposits/search/Query?query=" + query, DepositInfo[].class);
+        return response.getBody();
     }
     @Override
     public DepositsData searchDepositsData(String query) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/deposits/data/search?query=" + query, DepositsData.class);
-        return (DepositsData)response.getBody();
+        ResponseEntity<DepositsData> response = get(
+            brokerURL + "/vaults/deposits/data/search?query=" + query, DepositsData.class);
+        return response.getBody();
     }
 
     @Override
     public DepositInfo[] searchDeposits(String query, String sort) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/deposits/search?query=" + query + "&sort=" + sort, DepositInfo[].class);
-        return (DepositInfo[])response.getBody();
+        ResponseEntity<DepositInfo[]> response = get(
+            brokerURL + "/vaults/deposits/search?query=" + query + "&sort=" + sort,
+            DepositInfo[].class);
+        return response.getBody();
     }
     @Override
     public DepositsData searchDepositsData(String query, String sort, String order) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/deposits/data/search?query=" + query + "&sort=" + sort + "&order=" + order, DepositsData.class);
-        return (DepositsData)response.getBody();
+        ResponseEntity<DepositsData> response = get(
+            brokerURL + "/vaults/deposits/data/search?query=" + query + "&sort=" + sort + "&order="
+                + order, DepositsData.class);
+        return response.getBody();
     }
 
     @Override
     public int getRetrievesCount() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/retrievecount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/statistics/retrievecount",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public int getRetrievesQueue() {
-        HttpEntity<?> response = get(brokerURL + "/vaults/retrievequeuecount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/vaults/retrievequeuecount",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public int getRetrievesInProgressCount() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/retrieveinprogresscount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/statistics/retrieveinprogresscount",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public Retrieve[] getRetrievesInProgress() {
-        HttpEntity<?> response = get(brokerURL + "/vaults/retrieveinprogress", Retrieve[].class);
-        return (Retrieve[])response.getBody();
+        ResponseEntity<Retrieve[]> response = get(brokerURL + "/vaults/retrieveinprogress",
+            Retrieve[].class);
+        return response.getBody();
     }
 
     @Override
     public Retrieve[] getRetrievesListingAll() {
-        HttpEntity<?> response = get(brokerURL + "/admin/retrieves", Retrieve[].class);
-        return (Retrieve[])response.getBody();
+        ResponseEntity<Retrieve[]> response = get(brokerURL + "/admin/retrieves", Retrieve[].class);
+        return response.getBody();
     }
 
     @Override
     public Vault getVaultRecord(String id) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + id + "/record", Vault.class);
-        return (Vault)response.getBody();
+        ResponseEntity<Vault> response = get(brokerURL + "/vaults/" + id + "/record", Vault.class);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo getVault(String id) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + id, VaultInfo.class);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = get(brokerURL + "/vaults/" + id, VaultInfo.class);
+        return response.getBody();
     }
 
     @Override
     public Vault checkVaultRetentionPolicy(String vaultId) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + vaultId + "/checkretentionpolicy", Vault.class);
-        return (Vault)response.getBody();
+        ResponseEntity<Vault> response = get(
+            brokerURL + "/vaults/" + vaultId + "/checkretentionpolicy", Vault.class);
+        return response.getBody();
     }
 
     @Override
     public int getRetentionPolicyStatusCount(int status) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/retentionpolicycount/" + status, Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/vaults/retentionpolicycount/" + status,
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public DepositInfo[] getDepositsListing(String vaultId) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + vaultId + "/deposits", DepositInfo[].class);
-        return (DepositInfo[])response.getBody();
+        ResponseEntity<DepositInfo[]> response = get(brokerURL + "/vaults/" + vaultId + "/deposits",
+            DepositInfo[].class);
+        return response.getBody();
     }
 
 
     @Override
     public DataManager[] getDataManagers(String vaultId) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + vaultId + "/dataManagers", DataManager[].class);
-        return (DataManager[])response.getBody();
+        ResponseEntity<DataManager[]> response = get(
+            brokerURL + "/vaults/" + vaultId + "/dataManagers", DataManager[].class);
+        return response.getBody();
     }
 
     @Override
     public DataManager getDataManager(String vaultId, String uun) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + vaultId + "/dataManager/" + uun, DataManager.class);
-        return (DataManager)response.getBody();
+        ResponseEntity<DataManager> response = get(
+            brokerURL + "/vaults/" + vaultId + "/dataManager/" + uun, DataManager.class);
+        return response.getBody();
     }
 
     @Override
     public DepositsData getDepositsListingAllData() {
-        HttpEntity<?> response = get(brokerURL + "/admin/deposits/data", DepositsData.class);
-        return (DepositsData)response.getBody();
+        ResponseEntity<DepositsData> response = get(brokerURL + "/admin/deposits/data",
+            DepositsData.class);
+        return response.getBody();
     }
 
     @Override
     public DepositInfo[] getDepositsListingAll(String query, String sort, String order, int offset,
         int maxResult) {
-        HttpEntity<?> response = get(brokerURL + "/admin/deposits?query=" + query + "&sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult, DepositInfo[].class);
-        return (DepositInfo[])response.getBody();
+        ResponseEntity<DepositInfo[]> response = get(
+            brokerURL + "/admin/deposits?query=" + query + "&sort=" + sort + "&order=" + order
+                + "&offset=" + offset + "&maxResult=" + maxResult, DepositInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public Integer getTotalDepositsCount(String query) {
-        HttpEntity<?> response = get(brokerURL + "/admin/deposits/count?query="+query, Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/admin/deposits/count?query=" + query,
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public DepositsData getDepositsListingAllData(String sort) {
-        HttpEntity<?> response = get(brokerURL + "/admin/deposits/data?sort=" + sort, DepositsData.class);
-        return (DepositsData)response.getBody();
+        ResponseEntity<DepositsData> response = get(brokerURL + "/admin/deposits/data?sort=" + sort,
+            DepositsData.class);
+        return response.getBody();
     }
 
     @Override
     public DepositInfo getDeposit(String depositID) {
-        HttpEntity<?> response = get(brokerURL + "/deposits/" + depositID, DepositInfo.class);
-        return (DepositInfo)response.getBody();
+        ResponseEntity<DepositInfo> response = get(brokerURL + "/deposits/" + depositID,
+            DepositInfo.class);
+        return response.getBody();
     }
 
     @Override
     public FileFixity[] getDepositManifest(String depositID) {
-        HttpEntity<?> response = get(brokerURL + "/deposits/" + depositID + "/manifest", FileFixity[].class);
-        return (FileFixity[])response.getBody();
+        ResponseEntity<FileFixity[]> response = get(
+            brokerURL + "/deposits/" + depositID + "/manifest", FileFixity[].class);
+        return response.getBody();
     }
 
     @Override
     public EventInfo[] getDepositEvents(String depositID) {
-        HttpEntity<?> response = get(brokerURL + "/deposits/" + depositID + "/events", EventInfo[].class);
-        return (EventInfo[])response.getBody();
+        ResponseEntity<EventInfo[]> response = get(brokerURL + "/deposits/" + depositID + "/events",
+            EventInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public Job[] getDepositJobs(String depositID) {
-        HttpEntity<?> response = get(brokerURL + "/deposits/" + depositID + "/jobs", Job[].class);
-        return (Job[])response.getBody();
+        ResponseEntity<Job[]> response = get(brokerURL + "/deposits/" + depositID + "/jobs",
+            Job[].class);
+        return response.getBody();
     }
 
     @Override
     public Retrieve[] getDepositRetrieves(String depositID) {
-        HttpEntity<?> response = get(brokerURL + "/deposits/" + depositID + "/retrieves", Retrieve[].class);
-        return (Retrieve[])response.getBody();
+        ResponseEntity<Retrieve[]> response = get(
+            brokerURL + "/deposits/" + depositID + "/retrieves", Retrieve[].class);
+        return response.getBody();
     }
 
     @Override
     public RetentionPolicy[] getRetentionPolicyListing() {
-        HttpEntity<?> response = get(brokerURL + "/retentionpolicies", RetentionPolicy[].class);
-        return (RetentionPolicy[])response.getBody();
+        ResponseEntity<RetentionPolicy[]> response = get(brokerURL + "/retentionpolicies",
+            RetentionPolicy[].class);
+        return response.getBody();
     }
 
     @Override
     public CreateRetentionPolicy getRetentionPolicy(String retentionPolicyId) {
-        HttpEntity<?> response = get(brokerURL + "/admin/retentionpolicies/" + retentionPolicyId, CreateRetentionPolicy.class);
-        return (CreateRetentionPolicy)response.getBody();
+        ResponseEntity<CreateRetentionPolicy> response = get(
+            brokerURL + "/admin/retentionpolicies/" + retentionPolicyId,
+            CreateRetentionPolicy.class);
+        return response.getBody();
     }
 
     @Override
     public User getUser(String userId) {
-        HttpEntity<?> response = get(brokerURL + "/users/" + userId, User.class);
-        return (User)response.getBody();
+        ResponseEntity<User> response = get(brokerURL + "/users/" + userId, User.class);
+        return response.getBody();
     }
 
     @Override
     public User[] getUsers() {
-        HttpEntity<?> response = get(brokerURL + "/users", User[].class);
-        return (User[])response.getBody();
+        ResponseEntity<User[]> response = get(brokerURL + "/users", User[].class);
+        return response.getBody();
     }
 
     @Override
     public User[] searchUsers(String query) {
-        HttpEntity<?> response = get(brokerURL + "/admin/users/search?query=" + query, User[].class);
-        return (User[])response.getBody();
+        ResponseEntity<User[]> response = get(brokerURL + "/admin/users/search?query=" + query,
+            User[].class);
+        return response.getBody();
     }
 
     @Override
     public int getUsersCount() {
-        HttpEntity<?> response = get(brokerURL + "/admin/users/count", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/admin/users/count", Integer.class);
+        return response.getBody();
     }
 
     @Override
     public Group getGroup(String groupId) {
-        HttpEntity<?> response = get(brokerURL + "/groups/" + groupId, Group.class);
-        return (Group)response.getBody();
+        ResponseEntity<Group> response = get(brokerURL + "/groups/" + groupId, Group.class);
+        return response.getBody();
     }
 
     @Override
     public Group[] getGroups() {
-        HttpEntity<?> response = get(brokerURL + "/groups", Group[].class);
+        ResponseEntity<Group[]> response = get(brokerURL + "/groups", Group[].class);
         return (Group[])response.getBody();
     }
 
     @Override
     public Group[] getGroupsByScopedPermissions() {
-        HttpEntity<?> response = get(brokerURL + "/groups/byScopedPermissions", Group[].class);
-        return (Group[])response.getBody();
+        ResponseEntity<Group[]> response = get(brokerURL + "/groups/byScopedPermissions", Group[].class);
+        return response.getBody();
     }
 
     @Override
     public int getGroupsCount() {
-        HttpEntity<?> response = get(brokerURL + "/groups/count", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/groups/count", Integer.class);
+        return response.getBody();
     }
 
     @Override
     public int getGroupVaultCount(String vaultid) {
-        HttpEntity<?> response = get(brokerURL + "/groups/" + vaultid + "/count", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/groups/" + vaultid + "/count",
+            Integer.class);
+        return response.getBody();
     }
 
     @Override
     public boolean deleteGroup(String groupID) {
-        HttpEntity<?> response = delete(brokerURL + "/groups/" + groupID, Boolean.class);
-        return (Boolean)response.getBody();
+        ResponseEntity<Boolean> response = delete(brokerURL + "/groups/" + groupID, Boolean.class);
+        return response.getBody();
     }
 
     @Override
     public Group updateGroup(Group group) {
-        HttpEntity<?> response = post(brokerURL + "/groups/update", Group.class, group);
-        return (Group)response.getBody();
+        ResponseEntity<Group> response = post(brokerURL + "/groups/update", Group.class, group);
+        return response.getBody();
     }
 
     @Override
     public Dataset[] getDatasets() {
-        HttpEntity<?> response = get(brokerURL + "/metadata/datasets", Dataset[].class);
-        return (Dataset[])response.getBody();
+        ResponseEntity<Dataset[]> response = get(brokerURL + "/metadata/datasets", Dataset[].class);
+        return response.getBody();
     }
 
     @Override
     public EventInfo[] getEvents() {
-        HttpEntity<?> response = get(brokerURL + "/admin/events?sort=timestamp", EventInfo[].class);
-        return (EventInfo[])response.getBody();
+        ResponseEntity<EventInfo[]> response = get(brokerURL + "/admin/events?sort=timestamp",
+            EventInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public int getEventCount() {
-        HttpEntity<?> response = get(brokerURL + "/statistics/eventcount", Integer.class);
-        return (Integer)response.getBody();
+        ResponseEntity<Integer> response = get(brokerURL + "/statistics/eventcount", Integer.class);
+        return response.getBody();
     }
 
     /* POST requests */
@@ -574,40 +607,55 @@ public class RestServiceImpl implements RestService {
                 "chunkSize=" + chunkSize + "&" +
                 "totalSize=" + totalSize + "&";
 
-        HttpEntity<?> response = post(fileChunkURL, Byte[].class, content);
+        /*
+          TODO - this looks like a bug
+          The broker's '/upload' handler
+          org/datavaultplatform/broker/controllers/FilesController#postFileChunk/
+          returns a String - not Byte[]
+        */
+        /*
+        ResponseEntity<?> response = post(fileChunkURL, Byte[].class, content);
         return (String)response.getBody();
+         */
+        ResponseEntity<String> response = post(fileChunkURL, String.class, content);
+        return response.getBody();
     }
 
     @Override
     public FileStore addFileStore(FileStore fileStore) {
-        HttpEntity<?> response = post(brokerURL + "/filestores/", FileStore.class, fileStore);
-        return (FileStore)response.getBody();
+        ResponseEntity<FileStore> response = post(brokerURL + "/filestores/", FileStore.class,
+            fileStore);
+        return response.getBody();
     }
 
     @Override
     public FileStore addFileStoreSFTP(FileStore fileStore) {
-        HttpEntity<?> response = post(brokerURL + "/filestores/sftp", FileStore.class, fileStore);
-        return (FileStore)response.getBody();
+        ResponseEntity<FileStore> response = post(brokerURL + "/filestores/sftp", FileStore.class,
+            fileStore);
+        return response.getBody();
     }
 
     @Override
     public ArchiveStore addArchiveStore(ArchiveStore archiveStore) {
-        System.out.println("Post request to broker");
-        HttpEntity<?> response = post(brokerURL + "/admin/archivestores/", ArchiveStore.class, archiveStore);
-        System.out.println("Done");
-        return (ArchiveStore)response.getBody();
+        logger.debug("Post request to broker");
+        ResponseEntity<ArchiveStore> response = post(brokerURL + "/admin/archivestores/",
+            ArchiveStore.class, archiveStore);
+        logger.debug("Done");
+        return response.getBody();
     }
 
     @Override
     public ArchiveStore editArchiveStore(ArchiveStore archiveStore) {
-        HttpEntity<?> response = put(brokerURL + "/admin/archivestores/", ArchiveStore.class, archiveStore);
-        return (ArchiveStore)response.getBody();
+        ResponseEntity<ArchiveStore> response = put(brokerURL + "/admin/archivestores/",
+            ArchiveStore.class, archiveStore);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo addVault(CreateVault createVault) {
-        HttpEntity<?> response = post(brokerURL + "/vaults/", VaultInfo.class, createVault);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = post(brokerURL + "/vaults/", VaultInfo.class,
+            createVault);
+        return response.getBody();
     }
 
     @Override
@@ -617,126 +665,145 @@ public class RestServiceImpl implements RestService {
 
     @Override
     public ReviewInfo createCurrentReview(String vaultId) {
-        HttpEntity<?> response = post(brokerURL +"/admin/vaults/vaultreviews/current", ReviewInfo.class,  vaultId);
-        return (ReviewInfo)response.getBody();
+        ResponseEntity<ReviewInfo> response = post(brokerURL + "/admin/vaults/vaultreviews/current",
+            ReviewInfo.class, vaultId);
+        return response.getBody();
     }
 
     @Override
     public VaultReview editVaultReview(VaultReview vaultReview) {
-        HttpEntity<?> response = put(brokerURL + "/admin/vaults/vaultreviews", VaultReview.class, vaultReview);
-        return (VaultReview)response.getBody();
+        ResponseEntity<VaultReview> response = put(brokerURL + "/admin/vaults/vaultreviews",
+            VaultReview.class, vaultReview);
+        return response.getBody();
     }
 
     @Override
     public DepositInfo addDeposit(CreateDeposit createDeposit) {
-        HttpEntity<?> response = post(brokerURL + "/deposits", DepositInfo.class, createDeposit);
-        return (DepositInfo)response.getBody();
+        ResponseEntity<DepositInfo> response = post(brokerURL + "/deposits", DepositInfo.class,
+            createDeposit);
+        return response.getBody();
     }
 
     @Override
     public DepositReview addDepositReview(String depositId, String vaultReviewId) {
-        HttpEntity<?> response = post(brokerURL +"/admin/vaultreviews/" + vaultReviewId +  "/depositreviews", DepositReview.class, depositId);
-        return (DepositReview)response.getBody();
+        ResponseEntity<DepositReview> response = post(
+            brokerURL + "/admin/vaultreviews/" + vaultReviewId + "/depositreviews",
+            DepositReview.class, depositId);
+        return response.getBody();
     }
 
     @Override
     public DepositReview editDepositReview(DepositReview depositReview) {
-        HttpEntity<?> response = put(brokerURL + "/admin/vaultreviews/depositreviews", DepositReview.class, depositReview);
-        return (DepositReview)response.getBody();
+        ResponseEntity<DepositReview> response = put(
+            brokerURL + "/admin/vaultreviews/depositreviews", DepositReview.class, depositReview);
+        return response.getBody();
     }
 
 
     @Override
     public Group addGroup(Group group) {
-        HttpEntity<?> response = post(brokerURL + "/groups/", Group.class, group);
-        return (Group)response.getBody();
+        ResponseEntity<Group> response = post(brokerURL + "/groups/", Group.class, group);
+        return response.getBody();
     }
 
     @Override
     public Boolean retrieveDeposit(String depositID, Retrieve retrieve) {
-        HttpEntity<?> response = post(brokerURL + "/deposits/" + depositID + "/retrieve", Boolean.class, retrieve);
-        return (Boolean)response.getBody();
+        ResponseEntity<Boolean> response = post(brokerURL + "/deposits/" + depositID + "/retrieve",
+            Boolean.class, retrieve);
+        return response.getBody();
     }
 
     @Override
     public Deposit restartDeposit(String depositID) {
-        HttpEntity<?> response = post(brokerURL + "/deposits/" + depositID + "/restart", Deposit.class, null);
-        return (Deposit)response.getBody();
+        ResponseEntity<Deposit> response = post(brokerURL + "/deposits/" + depositID + "/restart",
+            Deposit.class, null);
+        return response.getBody();
     }
 
     @Override
     public User addUser(User user) {
-        HttpEntity<?> response = post(brokerURL + "/users/", User.class, user);
-        return (User)response.getBody();
+        ResponseEntity<User> response = post(brokerURL + "/users/", User.class, user);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo addDataManager(String vaultId, String dataManagerUUN) {
-        HttpEntity<?> response = post(brokerURL + "/vaults/" + vaultId + "/addDataManager", VaultInfo.class, dataManagerUUN);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = post(
+            brokerURL + "/vaults/" + vaultId + "/addDataManager", VaultInfo.class, dataManagerUUN);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo deleteDataManager(String vaultId, String dataManagerID) {
-        HttpEntity<?> response = delete(brokerURL + "/vaults/" + vaultId + "/deleteDataManager/" + dataManagerID, VaultInfo.class);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = delete(
+            brokerURL + "/vaults/" + vaultId + "/deleteDataManager/" + dataManagerID,
+            VaultInfo.class);
+        return response.getBody();
     }
 
     @Override
     public User editUser(User user) {
-        HttpEntity<?> response = put(brokerURL + "/admin/users/", User.class, user);
-        return (User)response.getBody();
+        ResponseEntity<User> response = put(brokerURL + "/admin/users/", User.class, user);
+        return response.getBody();
     }
 
     @Override
     public Boolean userExists(ValidateUser validateUser) {
         // Using a POST because I read somewhere that its somehow more secure to POST credentials, could be nonsense
-        HttpEntity<?> response = post(brokerURL + "/auth/users/exists", Boolean.class, validateUser);
-        return (Boolean)response.getBody();
+        ResponseEntity<Boolean> response = post(brokerURL + "/auth/users/exists", Boolean.class,
+            validateUser);
+        return response.getBody();
     }
 
     @Override
     public Boolean isValid(ValidateUser validateUser) {
         // Using a POST because I read somewhere that its somehow more secure to POST credentials, could be nonsense
-        HttpEntity<?> response = post(brokerURL + "/auth/users/isvalid", Boolean.class, validateUser);
-        return (Boolean)response.getBody();
+        ResponseEntity<Boolean> response = post(brokerURL + "/auth/users/isvalid", Boolean.class,
+            validateUser);
+        return response.getBody();
     }
 
     @Override
     public Boolean isAdmin(ValidateUser validateUser) {
         // Using a POST because I read somewhere that its somehow more secure to POST credentials, could be nonsense
-        HttpEntity<?> response = post(brokerURL + "/auth/users/isadmin", Boolean.class, validateUser);
-        return (Boolean)response.getBody();
+        ResponseEntity<Boolean> response = post(brokerURL + "/auth/users/isadmin", Boolean.class,
+            validateUser);
+        return response.getBody();
     }
 
     @Override
     public String notifyLogin(CreateClientEvent clientEvent) {
-        HttpEntity<?> response = put(brokerURL + "/notify/login", String.class, clientEvent);
-        return (String)response.getBody();
+        ResponseEntity<String> response = put(brokerURL + "/notify/login", String.class,
+            clientEvent);
+        return response.getBody();
     }
 
     @Override
     public String notifyLogout(CreateClientEvent clientEvent) {
-        HttpEntity<?> response = put(brokerURL + "/notify/logout", String.class, clientEvent);
-        return (String)response.getBody();
+        ResponseEntity<String> response = put(brokerURL + "/notify/logout", String.class,
+            clientEvent);
+        return response.getBody();
     }
 
     @Override
     public String enableGroup(String groupId) {
-        HttpEntity<?> response = put(brokerURL + "/groups/" + groupId + "/enable", String.class, null);
-        return (String)response.getBody();
+        ResponseEntity<String> response = put(brokerURL + "/groups/" + groupId + "/enable",
+            String.class, null);
+        return response.getBody();
     }
 
     @Override
     public String disableGroup(String groupId) {
-        HttpEntity<?> response = put(brokerURL + "/groups/" + groupId + "/disable", String.class, null);
-        return (String)response.getBody();
+        ResponseEntity<String> response = put(brokerURL + "/groups/" + groupId + "/disable",
+            String.class, null);
+        return response.getBody();
     }
 
     @Override
     public String addGroupOwner(String groupId, String userId) {
-        HttpEntity<?> response = put(brokerURL + "/groups/" + groupId + "/users/" + userId, String.class, null);
-        return (String)response.getBody();
+        ResponseEntity<String> response = put(brokerURL + "/groups/" + groupId + "/users/" + userId,
+            String.class, null);
+        return response.getBody();
     }
 
     /* DELETE requests */
@@ -757,20 +824,24 @@ public class RestServiceImpl implements RestService {
 
     @Override
     public VaultInfo updateVaultDescription(String vaultId, String vaultDescription) {
-        HttpEntity<?> response = post(brokerURL + "/vaults/" + vaultId + "/updateVaultDescription", VaultInfo.class, vaultDescription);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = post(
+            brokerURL + "/vaults/" + vaultId + "/updateVaultDescription", VaultInfo.class,
+            vaultDescription);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo updateVaultName(String vaultId, String vaultName) {
-        HttpEntity<?> response = post(brokerURL + "/vaults/" + vaultId + "/updateVaultName", VaultInfo.class, vaultName);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = post(
+            brokerURL + "/vaults/" + vaultId + "/updateVaultName", VaultInfo.class, vaultName);
+        return response.getBody();
     }
 
     @Override
     public VaultInfo updateVaultReviewDate(String vaultId, String reviewDate) {
-        HttpEntity<?> response = post(brokerURL + "/vaults/" + vaultId + "/updatereviewdate", VaultInfo.class, reviewDate);
-        return (VaultInfo)response.getBody();
+        ResponseEntity<VaultInfo> response = post(
+            brokerURL + "/vaults/" + vaultId + "/updatereviewdate", VaultInfo.class, reviewDate);
+        return response.getBody();
     }
 
     @Override
@@ -780,8 +851,10 @@ public class RestServiceImpl implements RestService {
 
     @Override
     public BillingInformation updateBillingInfo(String vaultId, BillingInformation billingInfo) {
-        HttpEntity<?> response = post(brokerURL + "/admin/billing/" + vaultId+ "/updateBilling" , BillingInformation.class,billingInfo);
-        return (BillingInformation)response.getBody();
+        ResponseEntity<BillingInformation> response = post(
+            brokerURL + "/admin/billing/" + vaultId + "/updateBilling", BillingInformation.class,
+            billingInfo);
+        return response.getBody();
     }
 
     @Override
@@ -881,37 +954,42 @@ public class RestServiceImpl implements RestService {
 
     @Override
     public String auditDeposits() {
-        HttpEntity<?> response =  get(brokerURL + "/admin/deposits/audit", String.class);
-        return (String)response.getBody();
+        ResponseEntity<String> response = get(brokerURL + "/admin/deposits/audit", String.class);
+        return response.getBody();
     }
 
     @Override
     public AuditInfo[] getAuditsListingAll() {
-        HttpEntity<?> response = get(brokerURL + "/admin/audits", AuditInfo[].class);
-        return (AuditInfo[])response.getBody();
+        ResponseEntity<AuditInfo[]> response = get(brokerURL + "/admin/audits", AuditInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public EventInfo[] getVaultsRoleEvents(String vaultId) {
-        HttpEntity<?> response = get(brokerURL + "/vaults/" + vaultId + "/roleEvents", EventInfo[].class);
-        return (EventInfo[])response.getBody();
+        ResponseEntity<EventInfo[]> response = get(brokerURL + "/vaults/" + vaultId + "/roleEvents",
+            EventInfo[].class);
+        return response.getBody();
     }
 
     @Override
     public void deleteRetentionPolicy(String policyId) {
-        HttpEntity<?> response = delete(brokerURL + "/admin/retentionpolicies/delete/" + policyId, Void.class);
+        ResponseEntity<Void> response = delete(
+            brokerURL + "/admin/retentionpolicies/delete/" + policyId, Void.class);
     }
 
     @Override
     public CreateRetentionPolicy addRetentionPolicy(CreateRetentionPolicy createRetentionPolicy) {
-        HttpEntity<?> response = post(brokerURL + "/admin/retentionpolicies", CreateRetentionPolicy.class, createRetentionPolicy);
-        return (CreateRetentionPolicy)response.getBody();
+        ResponseEntity<CreateRetentionPolicy> response = post(
+            brokerURL + "/admin/retentionpolicies", CreateRetentionPolicy.class,
+            createRetentionPolicy);
+        return response.getBody();
     }
 
     @Override
     public CreateRetentionPolicy editRetentionPolicy(CreateRetentionPolicy createRetentionPolicy) {
-        HttpEntity<?> response = put(brokerURL + "/admin/retentionpolicies", CreateRetentionPolicy.class, createRetentionPolicy);
-        return (CreateRetentionPolicy)response.getBody();
+        ResponseEntity<CreateRetentionPolicy> response = put(brokerURL + "/admin/retentionpolicies",
+            CreateRetentionPolicy.class, createRetentionPolicy);
+        return response.getBody();
     }
 
 }

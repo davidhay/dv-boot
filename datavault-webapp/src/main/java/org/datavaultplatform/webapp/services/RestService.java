@@ -35,17 +35,17 @@ import org.datavaultplatform.common.response.EventInfo;
 import org.datavaultplatform.common.response.ReviewInfo;
 import org.datavaultplatform.common.response.VaultInfo;
 import org.datavaultplatform.common.response.VaultsData;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 
 public interface RestService extends NotifyLogoutService, NotifyLoginService {
 
-  <T> HttpEntity<T> get(String url, Class<T> clazz);
+  <T> ResponseEntity<T> get(String url, Class<T> clazz);
 
-  <T> HttpEntity<T> put(String url, Class<T> clazz, Object payload);
+  <T> ResponseEntity<T> put(String url, Class<T> clazz, Object payload);
 
-  <T> HttpEntity<T> post(String url, Class<T> clazz, Object payload);
+  <T> ResponseEntity<T> post(String url, Class<T> clazz, Object payload);
 
-  HttpEntity<?> delete(String url, Class clazz);
+  <T> ResponseEntity<T> delete(String url, Class<T> clazz);
 
   FileStore[] getFileStoreListing();
 
