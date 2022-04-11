@@ -31,15 +31,12 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseAuthenticationProvider.class);
 
-    private RestService restService;
+    private final RestService restService;
 
-    private PermissionsService permissionsService;
+    private final PermissionsService permissionsService;
 
-	public void setRestService(RestService restService) {
+    public DatabaseAuthenticationProvider(RestService restService, PermissionsService permissionsService) {
         this.restService = restService;
-    }
-
-    public void setPermissionsService(PermissionsService permissionsService) {
         this.permissionsService = permissionsService;
     }
 

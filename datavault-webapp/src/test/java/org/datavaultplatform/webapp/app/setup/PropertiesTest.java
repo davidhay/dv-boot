@@ -2,13 +2,13 @@ package org.datavaultplatform.webapp.app.setup;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@AddTestProperties
+@ActiveProfiles("standalone")
 public class PropertiesTest {
 
   @Test

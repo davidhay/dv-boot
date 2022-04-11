@@ -7,18 +7,13 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import org.datavaultplatform.common.request.CreateClientEvent;
-import org.datavaultplatform.webapp.services.RestService;
-import org.datavaultplatform.webapp.test.AddTestProperties;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,14 +23,15 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AddTestProperties
 @WithMockUser(username = "mUser")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@ActiveProfiles("standalone")
 /**
  * This test checks basic Logout.
  * It does NOT test the LogoutListener and NotifyLogoutService as these depend
@@ -43,9 +39,6 @@ import org.springframework.test.web.servlet.MvcResult;
  * To test LogoutListener - we must use RestTemplate/TestRestTemplate.
  */
 public class LogoutTest {
-
-  @MockBean
-  RestService mRestService;
 
   @Autowired
   MockMvc mvc;
@@ -121,9 +114,5 @@ public class LogoutTest {
     return result;
   }
 
-  @AfterEach
-  void checkNoLogoutNotificationsBecauseOfTestMechanism() {
-    Mockito.verifyNoInteractions(mRestService);
-  }
 
 }

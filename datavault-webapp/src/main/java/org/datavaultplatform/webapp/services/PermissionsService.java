@@ -8,11 +8,11 @@ import org.datavaultplatform.common.model.RoleAssignment;
 import org.datavaultplatform.common.model.RoleType;
 import org.datavaultplatform.webapp.model.AdminDashboardPermissionsModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("!standalone")
+@ConditionalOnBean(RestService.class)
 public class PermissionsService {
 
     private final RestService restService;

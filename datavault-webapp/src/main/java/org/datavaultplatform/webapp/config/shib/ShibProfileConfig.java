@@ -1,7 +1,6 @@
 package org.datavaultplatform.webapp.config.shib;
 
 import org.datavaultplatform.common.services.LDAPService;
-import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationFilter;
 import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationProvider;
 import org.datavaultplatform.webapp.auth.shib.ShibWebAuthenticationDetailsSource;
 import org.datavaultplatform.webapp.services.PermissionsService;
@@ -9,12 +8,13 @@ import org.datavaultplatform.webapp.services.RestService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
 @Configuration
 @Profile("shib")
+@Import(ShibWebSecurityConfig.class)
 public class ShibProfileConfig {
 
   /*
@@ -60,22 +60,6 @@ public class ShibProfileConfig {
     return result;
   }
 
-  /*
-   <bean id="shibFilter" class="org.datavaultplatform.webapp.authentication.ShibAuthenticationFilter">
-      <property name="principalRequestHeader" value="${shibboleth.principal}"/>
-      <property name="exceptionIfHeaderMissing" value="true"/>
-      <property name="authenticationManager" ref="authenticationManager" />
-      <property name="authenticationDetailsSource" ref="shibWebAuthenticationDetailsSource" />
-   </bean>
-   */
-  @Bean
-  ShibAuthenticationFilter shibFilter(ShibWebAuthenticationDetailsSource authDetailsSource, AuthenticationManager authenticationManager) {
-    ShibAuthenticationFilter filter = new ShibAuthenticationFilter();
-    filter.setExceptionIfHeaderMissing(true);
-    filter.setAuthenticationManager(authenticationManager);
-    filter.setAuthenticationDetailsSource(authDetailsSource);
-    return filter;
-  }
 
   @Bean
   Http403ForbiddenEntryPoint http403EntryPoint() {

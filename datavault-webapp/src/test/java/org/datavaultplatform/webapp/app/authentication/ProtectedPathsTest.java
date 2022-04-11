@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,12 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest
 @ActiveProfiles("standalone")
-@AddTestProperties
 @AutoConfigureMockMvc
 @Slf4j
 /**
  * Tests the Roles required to access protected paths.
- * @see org.datavaultplatform.webapp.config.WebSecurityConfig
+ * @see org.datavaultplatform.webapp.config.standalone.StandaloneWebSecurityConfig
  */
 public class ProtectedPathsTest {
 

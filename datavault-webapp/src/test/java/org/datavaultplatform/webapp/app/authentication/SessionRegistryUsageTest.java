@@ -8,13 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
-import org.datavaultplatform.webapp.services.RestService;
-import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.services.NotifyLoginService;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,20 +35,21 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 /**
  * Checks that when a user logs in, their session is registered in the SessionRegistry
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AddTestProperties
 @TestPropertySource(properties = "datavault.csrf.disabled=true")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Import(WaitForLogoutNotificationConfig.class)
+@ActiveProfiles("standalone")
 public class SessionRegistryUsageTest {
 
   @MockBean
-  RestService mRestService;
+  NotifyLoginService mNotifyLoginService;
 
   @Value("${spring.security.user.name}")
   String username;
@@ -74,6 +77,11 @@ public class SessionRegistryUsageTest {
 
   @LocalServerPort
   private int port;
+
+  @BeforeEach
+  void setup() {
+    Mockito.when(mNotifyLoginService.getGroups()).thenReturn(new Group[0]);
+  }
 
   private static ResponseEntity<String> makeGetRequestWithSession(TestRestTemplate template,
       String url, String sessionId) {

@@ -3,6 +3,7 @@ package org.datavaultplatform.webapp.auth.shib;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
+import org.springframework.util.Assert;
 
 /**
  * Under the covers this builds an PreAuthenticatedAuthenticationToken which is passed to the AuthenticationManager
@@ -20,7 +21,6 @@ public class ShibAuthenticationFilter extends AbstractPreAuthenticatedProcessing
     public void setPrincipalRequestHeader(String principalRequestHeader) {
         this.principalRequestHeader = principalRequestHeader;
     }
-
 
     /**
      * Read and returns the header named by {@code principalRequestHeader} from the
@@ -58,6 +58,12 @@ public class ShibAuthenticationFilter extends AbstractPreAuthenticatedProcessing
      */
     public void setExceptionIfHeaderMissing(boolean exceptionIfHeaderMissing) {
         this.exceptionIfHeaderMissing = exceptionIfHeaderMissing;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        super.afterPropertiesSet();
+        Assert.notNull(this.principalRequestHeader, "The principal request header must be set");
     }
 
 }

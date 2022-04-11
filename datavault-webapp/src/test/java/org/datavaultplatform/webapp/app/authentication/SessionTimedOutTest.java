@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
-import org.datavaultplatform.webapp.services.RestService;
-import org.datavaultplatform.webapp.test.AddTestProperties;
+import org.datavaultplatform.webapp.services.NotifyLoginService;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +33,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 /**
@@ -40,17 +43,17 @@ import org.springframework.test.context.TestPropertySource;
  * TODO - make sure SLOW tests like this only run in CICD
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AddTestProperties
 @TestPropertySource(properties = {"datavault.csrf.disabled=true",
     "server.servlet.session.timeout=1m"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
 @Import(WaitForLogoutNotificationConfig.class)
+@ActiveProfiles("standalone")
 @Disabled
 public class SessionTimedOutTest {
 
   @MockBean
-  RestService mRestService;
+  NotifyLoginService mNotifyLoginService;
 
   @Value("${spring.security.user.name}")
   String username;
@@ -83,6 +86,11 @@ public class SessionTimedOutTest {
     TestUtils.setSessionCookieHeader(headers, sessionId);
     HttpEntity<String> entity = new HttpEntity<>(headers);
     return template.exchange(url, HttpMethod.GET, entity, String.class);
+  }
+
+  @BeforeEach
+  void setup() {
+    Mockito.when(mNotifyLoginService.getGroups()).thenReturn(new Group[0]);
   }
 
   @Test

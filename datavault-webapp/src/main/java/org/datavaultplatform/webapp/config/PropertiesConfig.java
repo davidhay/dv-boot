@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 @PropertySources({
     // application.properties and application-{profile}.properties are added by default
 
-    // bundled with application - might need to conditionally remove for production
+    //TODO : bundled with application - might need to conditionally remove for non-standalone
     @PropertySource("classpath:datavault.properties"),
 
     @PropertySource(

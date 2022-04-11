@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 @TestPropertySource(properties = "server.servlet.encoding.charset=UTF-16")
+@ActiveProfiles("standalone")
 public class UTF16EncodingTest extends BaseServletEncodingTest{
 
   @Value("${server.servlet.encoding.charset}")

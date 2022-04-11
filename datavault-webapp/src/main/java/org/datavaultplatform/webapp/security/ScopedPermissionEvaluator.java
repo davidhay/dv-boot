@@ -7,7 +7,6 @@ import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.model.Permission;
 import org.datavaultplatform.common.model.Vault;
 import org.datavaultplatform.common.response.VaultInfo;
-import org.datavaultplatform.webapp.services.RestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +38,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class ScopedPermissionEvaluator implements PermissionEvaluator {
 
     private static final Logger logger = LoggerFactory.getLogger(ScopedPermissionEvaluator.class);
-    private final RestService rest;
+    private final EvaluatorService evaluatorService;
 
     @Autowired
-    public ScopedPermissionEvaluator(RestService rest) {
-        this.rest = rest;
+    public ScopedPermissionEvaluator(EvaluatorService evaluatorService) {
+        this.evaluatorService = evaluatorService;
     }
 
     /**
@@ -111,12 +110,12 @@ public class ScopedPermissionEvaluator implements PermissionEvaluator {
         final String id = targetId.toString();
 
         if (GROUP_VAULT.equalsIgnoreCase(targetType)) {
-            VaultInfo vaultInfo = rest.getVault(id);
-            return hasPermission(authentication, rest.getGroup(vaultInfo.getGroupID()), permission);
+            VaultInfo vaultInfo = evaluatorService.getVault(id);
+            return hasPermission(authentication, evaluatorService.getGroup(vaultInfo.getGroupID()), permission);
         } else if (VAULT_TYPE_SHORT.equalsIgnoreCase(targetType) || VAULT_TYPE.equalsIgnoreCase(targetType)) {
-            return hasPermission(authentication, rest.getVaultRecord(id), permission);
+            return hasPermission(authentication, evaluatorService.getVaultRecord(id), permission);
         } else if (GROUP_TYPE_SHORT.equalsIgnoreCase(targetType) || GROUP_TYPE.equalsIgnoreCase(targetType)) {
-            return hasPermission(authentication, rest.getGroup(id), permission);
+            return hasPermission(authentication, evaluatorService.getGroup(id), permission);
         } else {
             return false;
         }

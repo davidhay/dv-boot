@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("!standalone")
+@ConditionalOnBean(RestService.class)
 public class ForceLogoutService {
 
     private static final Logger logger = LoggerFactory.getLogger(ForceLogoutService.class);

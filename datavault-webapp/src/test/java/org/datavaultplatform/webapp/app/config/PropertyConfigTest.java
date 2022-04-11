@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.FileSystemUtils;
@@ -35,7 +35,7 @@ import org.springframework.util.FileSystemUtils;
  *   checks that the application can read the properties via PropertiesConfig using ENV variables
  */
 @SpringBootTest
-@AddTestProperties
+@ActiveProfiles("standalone")
 @Slf4j
 @DirtiesContext
 public class PropertyConfigTest {

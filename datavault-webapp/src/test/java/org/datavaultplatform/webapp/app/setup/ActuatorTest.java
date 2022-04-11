@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import java.util.Map;
 import java.util.Set;
-import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.datavaultplatform.webapp.test.TestClockConfig;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -20,14 +19,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
-@AddTestProperties
 @AutoConfigureMockMvc
 @Import(TestClockConfig.class)
+@ActiveProfiles("standalone")
 public class ActuatorTest {
 
   @Autowired

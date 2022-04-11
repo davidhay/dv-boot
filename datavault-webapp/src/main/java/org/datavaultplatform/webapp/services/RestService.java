@@ -35,9 +35,10 @@ import org.datavaultplatform.common.response.EventInfo;
 import org.datavaultplatform.common.response.ReviewInfo;
 import org.datavaultplatform.common.response.VaultInfo;
 import org.datavaultplatform.common.response.VaultsData;
+import org.datavaultplatform.webapp.security.EvaluatorService;
 import org.springframework.http.ResponseEntity;
 
-public interface RestService extends NotifyLogoutService, NotifyLoginService {
+public interface RestService extends NotifyLogoutService, NotifyLoginService, EvaluatorService {
 
   <T> ResponseEntity<T> get(String url, Class<T> clazz);
 

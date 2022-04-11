@@ -54,7 +54,7 @@ import org.springframework.web.client.RestTemplate;
  * Date: 01/05/2015
  * Time: 14:04
  */
-@Service
+@Service("restService")
 @Profile("!standalone")
 public class RestServiceImpl implements RestService {
 

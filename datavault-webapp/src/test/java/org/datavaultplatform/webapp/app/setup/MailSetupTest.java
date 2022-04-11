@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.webapp.test.AddTestProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 /* We override this property to test better.
@@ -19,8 +19,8 @@ this is not great for testing.
 */
 @TestPropertySource(properties = "mail.administrator=mail.admin@test.com")
 @SpringBootTest
-@AddTestProperties
 @Slf4j
+@ActiveProfiles("standalone")
 public class MailSetupTest {
 
   @Autowired

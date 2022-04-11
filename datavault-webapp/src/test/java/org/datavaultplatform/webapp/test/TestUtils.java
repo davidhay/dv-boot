@@ -4,6 +4,9 @@ import static org.awaitility.Awaitility.await;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -108,6 +111,10 @@ public abstract class TestUtils {
 
   public static String stripPrefix(String prefix, String value){
     return value.replaceFirst("^"+prefix,"");
+  }
+
+  public static Set toSet(String... items) {
+    return new HashSet(Arrays.asList(items));
   }
 
 }
