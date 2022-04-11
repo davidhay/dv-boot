@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AddTestProperties
+// Note : Spring allows second resolution for timeout but Tomcat only does minutes
 @TestPropertySource(properties = "server.servlet.session.timeout=14m")
 class ServletContextTest {
 
