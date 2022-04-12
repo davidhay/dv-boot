@@ -2,9 +2,11 @@ package org.datavaultplatform.webapp.config.database;
 
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.auth.AuthenticationSuccess;
+import org.datavaultplatform.webapp.auth.database.DatabaseAuthenticationProvider;
 import org.datavaultplatform.webapp.config.HttpSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -26,6 +28,9 @@ public class DatabaseWebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   AuthenticationSuccess authenticationSuccess;
 
+  @Autowired
+  DatabaseAuthenticationProvider authenticationProvider;
+
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.debug(securityDebug);
@@ -34,11 +39,16 @@ public class DatabaseWebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.authenticationProvider(authenticationProvider);
+  }
+
+  @Override
   protected void configure(HttpSecurity http) throws Exception {
 
     HttpSecurityUtils.sessionManagement(http, sessionRegistry);
 
-    HttpSecurityUtils.authorizeRequests(http, true);
+    HttpSecurityUtils.authorizeRequests(http);
 
     HttpSecurityUtils.formLogin(http, authenticationSuccess);
 

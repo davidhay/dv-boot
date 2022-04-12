@@ -36,13 +36,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 /**
  * Checks that when a user logs in, their session is registered in the SessionRegistry
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = "datavault.csrf.disabled=true")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Import(WaitForLogoutNotificationConfig.class)
 @ActiveProfiles("standalone")

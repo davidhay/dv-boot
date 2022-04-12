@@ -43,8 +43,7 @@ import org.springframework.test.context.TestPropertySource;
  * TODO - make sure SLOW tests like this only run in CICD
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = {"datavault.csrf.disabled=true",
-    "server.servlet.session.timeout=1m"})
+@TestPropertySource(properties = "server.servlet.session.timeout=1m")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
 @Import(WaitForLogoutNotificationConfig.class)

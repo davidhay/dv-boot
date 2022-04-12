@@ -13,9 +13,6 @@ import org.springframework.context.annotation.Profile;
 @Import(DatabaseWebSecurityConfig.class)
 public class DatabaseProfileConfig {
 
-  /*
-   * Spring Boot should see this AuthenticationProvider and create an AuthenticationManager to use it
-   */
   @Bean
   DatabaseAuthenticationProvider databaseAuthenticationProvider(RestService restService, PermissionsService permissionsService){
     return new DatabaseAuthenticationProvider(restService, permissionsService);

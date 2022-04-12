@@ -22,6 +22,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -65,12 +66,22 @@ public abstract class TestUtils {
 
   public static ResponseEntity<String> login(TestRestTemplate template, String username,
       String password) {
+    return login(template.getRestTemplate(), username, password);
+  }
+
+
+   public static ResponseEntity<String> login(RestTemplate template, String username,
+      String password) {
+
+    CsrfInfo csrfInfo = CsrfInfo.generate(template);
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    csrfInfo.addJSessionIdCookie(headers);
 
     LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
     params.add(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
     params.add(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY, password);
+    csrfInfo.addCsrfParam(params);
 
     HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
         new HttpEntity<>(params, headers);

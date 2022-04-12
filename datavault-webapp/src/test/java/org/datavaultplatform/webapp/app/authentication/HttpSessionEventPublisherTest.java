@@ -39,7 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class HttpSessionEventPublisherTest {
 
   @MockBean
-  NotifyLogoutService mRestService;
+  NotifyLogoutService mNotifyLogoutService;
 
   @Autowired
   HttpSessionEventPublisher publisher;
@@ -73,7 +73,7 @@ public class HttpSessionEventPublisherTest {
 
   @AfterEach
   void tearDown() {
-    Mockito.verifyNoInteractions(mRestService);
+    Mockito.verifyNoInteractions(mNotifyLogoutService);
   }
 
   @TestConfiguration

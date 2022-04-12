@@ -44,7 +44,7 @@ import org.springframework.test.web.servlet.ResultActions;
 public class LoginTest {
 
   @MockBean
-  NotifyLoginService mRestService;
+  NotifyLoginService mNotifyLoginService;
 
   @Autowired
   MockMvc mvc;
@@ -61,7 +61,7 @@ public class LoginTest {
     mvc.perform(get("/test/hello")).andExpect(status().isOk());
     mvc.perform(get("/error")).andExpect(status().isInternalServerError());
 
-    Mockito.verifyNoInteractions(mRestService);
+    Mockito.verifyNoInteractions(mNotifyLoginService);
   }
 
   @Test
@@ -70,7 +70,7 @@ public class LoginTest {
     assertEquals(HttpStatus.FOUND.value(), result.getResponse().getStatus());
     assertEquals("http://localhost/auth/login", result.getResponse().getRedirectedUrl());
 
-    Mockito.verifyNoInteractions(mRestService);
+    Mockito.verifyNoInteractions(mNotifyLoginService);
   }
 
   @Nested
@@ -85,8 +85,8 @@ public class LoginTest {
 
     @Test
     void success() throws Exception {
-      Mockito.when(mRestService.notifyLogin(argClientEvent.capture())).thenReturn("NOTIFIED");
-      Mockito.when(mRestService.getGroups()).thenReturn(new Group[0]);
+      Mockito.when(mNotifyLoginService.notifyLogin(argClientEvent.capture())).thenReturn("NOTIFIED");
+      Mockito.when(mNotifyLoginService.getGroups()).thenReturn(new Group[0]);
 
       MvcResult result =
           login(username, password)
@@ -105,9 +105,9 @@ public class LoginTest {
 
       assertEquals(Collections.singleton("ROLE_USER"), actualGrantedAuthorityNames);
 
-      Mockito.verify(mRestService, times(1)).notifyLogin(argClientEvent.getValue());
-      Mockito.verify(mRestService, times(1)).getGroups();
-      Mockito.verifyNoMoreInteractions(mRestService);
+      Mockito.verify(mNotifyLoginService, times(1)).notifyLogin(argClientEvent.getValue());
+      Mockito.verify(mNotifyLoginService, times(1)).getGroups();
+      Mockito.verifyNoMoreInteractions(mNotifyLoginService);
 
       assertEquals(sessionId, argClientEvent.getValue().getSessionId());
     }
@@ -119,7 +119,7 @@ public class LoginTest {
           .andExpect(unauthenticated())
           .andExpect(redirectedUrl("/auth/login?error=true"));
 
-      Mockito.verifyNoInteractions(mRestService);
+      Mockito.verifyNoInteractions(mNotifyLoginService);
     }
 
   }
