@@ -63,7 +63,7 @@ public class ProfileShibTest {
     @Test
     void testServiceBeans(ApplicationContext ctx) {
       Set<String> serviceNames = toSet(ctx.getBeanNamesForAnnotation(Service.class));
-      assertEquals(toSet("forceLogoutService", "restService", "permissionsService"), serviceNames);
+      assertEquals(toSet("forceLogoutService", "restService", "permissionsService","userLookupService"), serviceNames);
     }
 
   /**

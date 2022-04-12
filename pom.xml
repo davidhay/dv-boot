@@ -37,6 +37,8 @@
 		<jsondoc.core.version>1.2.23</jsondoc.core.version>
 		<apache.directory.api.version>2.1.0</apache.directory.api.version>
 		<jcraft.jsch.version>0.1.55</jcraft.jsch.version>
+		<super.csv.version>2.4.0</super.csv.version>
+		<commons.lang3.version>3.12.0</commons.lang3.version>
 	</properties>
 
 	<dependencyManagement>
@@ -88,6 +90,17 @@
 				<artifactId>jsch</artifactId>
 				<version>${jcraft.jsch.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>net.sf.supercsv</groupId>
+				<artifactId>super-csv</artifactId>
+				<version>${super.csv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons.lang3.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
