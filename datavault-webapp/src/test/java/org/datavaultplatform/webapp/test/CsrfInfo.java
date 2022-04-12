@@ -9,7 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Getter
@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @ToString
 @EqualsAndHashCode
 @Slf4j
-class CsrfInfo {
+public class CsrfInfo {
   private String sessionId;
   private String csrf;
 
@@ -30,11 +30,11 @@ class CsrfInfo {
     return CsrfInfo.builder().csrf(csrf).sessionId(jsessionid).build();
   }
 
-  void addJSessionIdCookie(HttpHeaders headers){
+  public void addJSessionIdCookie(HttpHeaders headers){
     headers.add("Cookie", String.format("JSESSIONID=%s",sessionId));
   }
 
-  void addCsrfParam(LinkedMultiValueMap<String, Object> params){
+  public void addCsrfParam(MultiValueMap<String, Object> params){
     params.add("_csrf", csrf);
   }
 }
