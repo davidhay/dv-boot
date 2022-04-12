@@ -13,6 +13,7 @@
 		<version>2.6.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>datavault</groupId>
 	<artifactId>datavault</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -27,14 +28,65 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skip.unit.tests>false</skip.unit.tests>
 		<java.version>1.8</java.version>
+		<git.commit.plugin.version>4.9.10</git.commit.plugin.version>
+		<aws.java.sdk.bom.version>1.12.196</aws.java.sdk.bom.version>
+		<oci.java.sdk.bom.version>2.22.0</oci.java.sdk.bom.version>
+		<jsoup.version>1.14.2</jsoup.version>
+		<vault.java.driver.version>5.1.0</vault.java.driver.version>
+		<commons.io.version>2.11.0</commons.io.version>
+		<jsondoc.core.version>1.2.23</jsondoc.core.version>
+		<apache.directory.api.version>2.1.0</apache.directory.api.version>
+		<jcraft.jsch.version>0.1.55</jcraft.jsch.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-bom -->
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-bom</artifactId>
+				<version>${aws.java.sdk.bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.oracle.oci.sdk/oci-java-sdk-bom -->
+			<dependency>
+				<groupId>com.oracle.oci.sdk</groupId>
+				<artifactId>oci-java-sdk-bom</artifactId>
+				<version>${oci.java.sdk.bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
-				<version>1.14.2</version>
+				<version>${jsoup.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.bettercloud</groupId>
+				<artifactId>vault-java-driver</artifactId>
+				<version>${vault.java.driver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons.io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jsondoc</groupId>
+				<artifactId>jsondoc-core</artifactId>
+				<version>${jsondoc.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.directory.api</groupId>
+				<artifactId>api-all</artifactId>
+				<version>${apache.directory.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${jcraft.jsch.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -81,7 +133,7 @@
 				<plugin>
 					<groupId>pl.project13.maven</groupId>
 					<artifactId>git-commit-id-plugin</artifactId>
-					<version>4.9.10</version>
+					<version>${git.commit.plugin.version}</version>
 					<configuration>
 						<failOnNoGitDirectory>false</failOnNoGitDirectory>
 						<offline>true</offline>
