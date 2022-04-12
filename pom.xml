@@ -84,6 +84,7 @@
 					<version>4.9.10</version>
 					<configuration>
 						<failOnNoGitDirectory>false</failOnNoGitDirectory>
+						<offline>true</offline>
 					</configuration>
 				</plugin>
 			</plugins>
