@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 @SpringBootApplication
 @ComponentScan({
-    "org.datavaultplatform.webapp.controllers.auth",
+    "org.datavaultplatform.webapp.controllers",
     "org.datavaultplatform.webapp.services"})
 @Import({PropertiesConfig.class, WebConfig.class, MvcConfig.class, ActutatorConfig.class,
     SecurityConfig.class, MailConfig.class, LdapConfig.class,

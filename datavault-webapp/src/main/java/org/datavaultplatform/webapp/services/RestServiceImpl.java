@@ -1,6 +1,7 @@
 package org.datavaultplatform.webapp.services;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.datavaultplatform.common.model.ArchiveStore;
@@ -13,6 +14,7 @@ import org.datavaultplatform.common.model.FileInfo;
 import org.datavaultplatform.common.model.FileStore;
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.model.Job;
+import org.datavaultplatform.common.model.PendingVault;
 import org.datavaultplatform.common.model.PermissionModel;
 import org.datavaultplatform.common.model.RetentionPolicy;
 import org.datavaultplatform.common.model.Retrieve;
@@ -211,6 +213,12 @@ public class RestServiceImpl implements RestService {
     }
 
     @Override
+    public VaultInfo[] getPendingVaultsListing() {
+        HttpEntity<?> response = get(brokerURL + "/pendingVaults", VaultInfo[].class);
+        return (VaultInfo[])response.getBody();
+    }
+
+    @Override
     public VaultInfo[] getVaultsListingForGroup(String groupID) {
         ResponseEntity<VaultInfo[]> response = get(brokerURL + "/groups/" + groupID + "/vaults", VaultInfo[].class);
         return response.getBody();
@@ -288,6 +296,18 @@ public class RestServiceImpl implements RestService {
     public Long getVaultsSize() {
         ResponseEntity<Long> response = get(brokerURL + "/statistics/size", Long.class);
         return response.getBody();
+    }
+
+    @Override
+    public VaultsData searchPendingVaults(String query, String sort, String order, int offset, int maxResult, Boolean confirmed) {
+        HttpEntity<?> response = get(brokerURL + "/pendingVaults/search?query=" + query + "&sort=" + sort + "&order=" + order+ "&offset=" + offset+ "&maxResult=" + maxResult + "&confirmed=" + confirmed, VaultsData.class);
+        return (VaultsData)response.getBody();
+    }
+
+    @Override
+    public int getTotalNumberOfPendingVaults() {
+        HttpEntity<?> response = get(brokerURL + "/statistics/pendingVaultsTotal", Integer.class);
+        return (Integer)response.getBody();
     }
 
     @Override
@@ -386,9 +406,21 @@ public class RestServiceImpl implements RestService {
     }
 
     @Override
+    public PendingVault getPendingVaultRecord(String id) {
+        ResponseEntity<PendingVault> response = get(brokerURL + "/pendingVaults/" + id + "/record", PendingVault.class);
+        return response.getBody();
+    }
+
+    @Override
     public VaultInfo getVault(String id) {
         ResponseEntity<VaultInfo> response = get(brokerURL + "/vaults/" + id, VaultInfo.class);
         return response.getBody();
+    }
+
+    @Override
+    public VaultInfo getPendingVault(String id) {
+        HttpEntity<?> response = get(brokerURL + "/pendingVaults/" + id, VaultInfo.class);
+        return (VaultInfo)response.getBody();
     }
 
     @Override
@@ -659,6 +691,23 @@ public class RestServiceImpl implements RestService {
     }
 
     @Override
+    public VaultInfo addPendingVault(CreateVault createVault) {
+        ResponseEntity<VaultInfo> response = post(brokerURL + "/pendingVaults/", VaultInfo.class, createVault);
+        return response.getBody();
+    }
+
+    @Override
+    public VaultInfo updatePendingVault(CreateVault createVault) {
+        ResponseEntity<VaultInfo> response = post(brokerURL + "/pendingVaults/update", VaultInfo.class, createVault);
+        return response.getBody();
+    }
+
+    @Override
+    public  Boolean addVaultForPendingVault(String pendingVaultId, Date reviewDate) {
+        ResponseEntity<Boolean> response = post(brokerURL + "/admin/pendingVaults/addVault/" + pendingVaultId, Boolean.class, reviewDate);
+        return response.getBody();
+    }
+
     public void transferVault(String vaultId, TransferVault transfer) {
         post(brokerURL + "/vaults/" + vaultId + "/transfer", VaultInfo.class, transfer);
     }
@@ -847,6 +896,11 @@ public class RestServiceImpl implements RestService {
     @Override
     public void deleteDeposit(String depositId) {
         delete(brokerURL + "/admin/deposits/" + depositId, String.class);
+    }
+
+    @Override
+    public void deletePendingVault(String pendingVaultId) {
+        delete(brokerURL + "/admin/pendingVaults/" + pendingVaultId, Void.class);
     }
 
     @Override

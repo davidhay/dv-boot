@@ -1,7 +1,7 @@
 package org.datavaultplatform.webapp.config;
 
-import org.datavaultplatform.webapp.auth.AuthenticationSuccess;
-import org.datavaultplatform.webapp.security.EvaluatorService;
+import org.datavaultplatform.webapp.authentication.AuthenticationSuccess;
+import org.datavaultplatform.webapp.services.EvaluatorService;
 import org.datavaultplatform.webapp.security.ScopedPermissionEvaluator;
 import org.datavaultplatform.webapp.services.NotifyLoginService;
 import org.springframework.context.annotation.Bean;

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.model.Vault;
 import org.datavaultplatform.common.response.VaultInfo;
-import org.datavaultplatform.webapp.security.EvaluatorService;
+import org.datavaultplatform.webapp.services.EvaluatorService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 

@@ -17,8 +17,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.bind.annotation.RestController;
 
 /*
  Test checks that the SpringBoot app starts up ok with 'standalone' profile
@@ -47,6 +49,13 @@ public class ProfileStandaloneTest {
         "standaloneNotifyLogoutService"), serviceNames);
   }
 
+  @Test
+  void testControllerBeans(ApplicationContext ctx) {
+    Set<String> names = toSet(ctx.getBeanNamesForAnnotation(Controller.class));
+    Set<String> restNames = toSet(ctx.getBeanNamesForAnnotation(RestController.class));
+    assertTrue(names.containsAll(restNames));
+    assertEquals(toSet("protectedTimeController", "timeController", "errorPageController", "simulateErrorController", "authController", "errorController", "fileUploadController", "helloController"), names);
+  }
 
   @TestConfiguration
   static class TestConfig implements ApplicationListener<ApplicationStartedEvent>{

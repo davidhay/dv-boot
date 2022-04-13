@@ -1,6 +1,5 @@
 package org.datavaultplatform.webapp.controllers;
 
-import org.checkerframework.checker.units.qual.A;
 import org.datavaultplatform.webapp.services.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

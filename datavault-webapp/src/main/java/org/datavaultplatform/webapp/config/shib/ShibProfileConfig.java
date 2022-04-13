@@ -1,8 +1,8 @@
 package org.datavaultplatform.webapp.config.shib;
 
 import org.datavaultplatform.common.services.LDAPService;
-import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationProvider;
-import org.datavaultplatform.webapp.auth.shib.ShibWebAuthenticationDetailsSource;
+import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationProvider;
+import org.datavaultplatform.webapp.authentication.shib.ShibWebAuthenticationDetailsSource;
 import org.datavaultplatform.webapp.services.PermissionsService;
 import org.datavaultplatform.webapp.services.RestService;
 import org.springframework.beans.factory.annotation.Value;

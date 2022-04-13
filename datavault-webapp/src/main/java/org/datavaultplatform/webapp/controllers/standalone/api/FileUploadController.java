@@ -1,7 +1,9 @@
 package org.datavaultplatform.webapp.controllers.standalone.api;
 
+import javax.ws.rs.Produces;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.model.test.Person;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 @Controller
 @RequestMapping("/test")
 @Slf4j
+@Profile("standalone")
 public class FileUploadController {
 
   @RequestMapping(value = "/upload/file/one", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method =  RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)

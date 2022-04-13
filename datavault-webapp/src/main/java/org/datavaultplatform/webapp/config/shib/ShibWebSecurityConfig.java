@@ -1,9 +1,9 @@
 package org.datavaultplatform.webapp.config.shib;
 
 import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationFilter;
-import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationProvider;
-import org.datavaultplatform.webapp.auth.shib.ShibWebAuthenticationDetailsSource;
+import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationFilter;
+import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationProvider;
+import org.datavaultplatform.webapp.authentication.shib.ShibWebAuthenticationDetailsSource;
 import org.datavaultplatform.webapp.config.HttpSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

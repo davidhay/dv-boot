@@ -1,8 +1,8 @@
 package org.datavaultplatform.webapp.config.database;
 
 import lombok.extern.slf4j.Slf4j;
-import org.datavaultplatform.webapp.auth.AuthenticationSuccess;
-import org.datavaultplatform.webapp.auth.database.DatabaseAuthenticationProvider;
+import org.datavaultplatform.webapp.authentication.AuthenticationSuccess;
+import org.datavaultplatform.webapp.authentication.database.DatabaseAuthenticationProvider;
 import org.datavaultplatform.webapp.config.HttpSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

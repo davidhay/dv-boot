@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.auth.shib;
+package org.datavaultplatform.webapp.authentication.shib;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;

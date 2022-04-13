@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.auth;
+package org.datavaultplatform.webapp.authentication;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

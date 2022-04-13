@@ -1,5 +1,6 @@
 package org.datavaultplatform.webapp.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.datavaultplatform.common.model.ArchiveStore;
@@ -12,6 +13,7 @@ import org.datavaultplatform.common.model.FileInfo;
 import org.datavaultplatform.common.model.FileStore;
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.model.Job;
+import org.datavaultplatform.common.model.PendingVault;
 import org.datavaultplatform.common.model.PermissionModel;
 import org.datavaultplatform.common.model.RetentionPolicy;
 import org.datavaultplatform.common.model.Retrieve;
@@ -35,7 +37,7 @@ import org.datavaultplatform.common.response.EventInfo;
 import org.datavaultplatform.common.response.ReviewInfo;
 import org.datavaultplatform.common.response.VaultInfo;
 import org.datavaultplatform.common.response.VaultsData;
-import org.datavaultplatform.webapp.security.EvaluatorService;
+import org.datavaultplatform.webapp.services.EvaluatorService;
 import org.springframework.http.ResponseEntity;
 
 public interface RestService extends NotifyLogoutService, NotifyLoginService, EvaluatorService {
@@ -303,4 +305,24 @@ public interface RestService extends NotifyLogoutService, NotifyLoginService, Ev
   CreateRetentionPolicy addRetentionPolicy(CreateRetentionPolicy createRetentionPolicy);
 
   CreateRetentionPolicy editRetentionPolicy(CreateRetentionPolicy createRetentionPolicy);
+
+  VaultInfo[] getPendingVaultsListing();
+
+  VaultsData searchPendingVaults(String query, String sort, String order, int offset, int maxResult,
+      Boolean confirmed);
+
+  int getTotalNumberOfPendingVaults();
+
+  VaultInfo updatePendingVault(CreateVault createVault);
+
+  PendingVault getPendingVaultRecord(String id);
+
+  VaultInfo getPendingVault(String id);
+
+  VaultInfo addPendingVault(CreateVault createVault);
+
+  Boolean addVaultForPendingVault(String pendingVaultId, Date reviewDate);
+
+  void deletePendingVault(String pendingVaultId);
+
 }

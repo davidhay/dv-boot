@@ -4,7 +4,7 @@ import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
 
 /**
- * @see org.datavaultplatform.webapp.auth.AuthenticationSuccess
+ * @see org.datavaultplatform.webapp.authentication.AuthenticationSuccess
  */
 public interface NotifyLoginService {
 

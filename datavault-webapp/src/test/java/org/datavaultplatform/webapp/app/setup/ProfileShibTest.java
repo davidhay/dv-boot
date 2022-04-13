@@ -13,8 +13,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.Filter;
 import lombok.SneakyThrows;
-import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationFilter;
-import org.datavaultplatform.webapp.auth.shib.ShibAuthenticationProvider;
+import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationFilter;
+import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -30,9 +30,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.session.ConcurrentSessionFilter;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.bind.annotation.RestController;
 
 /*
  Test checks that the SpringBoot app starts up ok with 'shib' profile
@@ -65,6 +67,14 @@ public class ProfileShibTest {
       Set<String> serviceNames = toSet(ctx.getBeanNamesForAnnotation(Service.class));
       assertEquals(toSet("forceLogoutService", "restService", "permissionsService","userLookupService"), serviceNames);
     }
+
+  @Test
+  void testControllerBeans(ApplicationContext ctx) {
+    Set<String> names = toSet(ctx.getBeanNamesForAnnotation(Controller.class));
+    Set<String> restNames = toSet(ctx.getBeanNamesForAnnotation(RestController.class));
+    assertTrue(names.containsAll(restNames));
+    assertThat(names.size()).isEqualTo(24);
+  }
 
   /**
      * Check that the ShibAuthenticationFilter is associated with the ShibAuthenticationProvider

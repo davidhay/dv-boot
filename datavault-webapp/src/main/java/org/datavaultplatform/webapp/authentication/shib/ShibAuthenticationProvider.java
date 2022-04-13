@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.auth.shib;
+package org.datavaultplatform.webapp.authentication.shib;
 
 import java.security.Principal;
 import java.util.ArrayList;

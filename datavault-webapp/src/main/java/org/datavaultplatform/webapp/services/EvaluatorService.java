@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.security;
+package org.datavaultplatform.webapp.services;
 
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.model.Vault;

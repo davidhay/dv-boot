@@ -1,6 +1,6 @@
 package org.datavaultplatform.webapp.config;
 
-import org.datavaultplatform.webapp.auth.AuthenticationSuccess;
+import org.datavaultplatform.webapp.authentication.AuthenticationSuccess;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.session.SessionRegistry;
 

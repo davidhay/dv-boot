@@ -1,6 +1,6 @@
 package org.datavaultplatform.webapp.config.database;
 
-import org.datavaultplatform.webapp.auth.database.DatabaseAuthenticationProvider;
+import org.datavaultplatform.webapp.authentication.database.DatabaseAuthenticationProvider;
 import org.datavaultplatform.webapp.services.PermissionsService;
 import org.datavaultplatform.webapp.services.RestService;
 import org.springframework.context.annotation.Bean;

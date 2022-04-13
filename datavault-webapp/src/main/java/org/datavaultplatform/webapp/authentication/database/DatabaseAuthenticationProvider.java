@@ -1,4 +1,4 @@
-package org.datavaultplatform.webapp.auth.database;
+package org.datavaultplatform.webapp.authentication.database;
 
 import java.security.Principal;
 import java.util.ArrayList;
