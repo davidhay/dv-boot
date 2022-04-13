@@ -6,8 +6,14 @@ INDEX PAGE
 <@sec.authorize access="isAuthenticated()">
   <ul>
     <li><a href="${springMacroRequestContext.getContextPath()}/auth/logout">Logout</a></li>
-    <li>logged in as <@sec.authentication property="principal.username" /></li>
+    <li>logged in as [<@sec.authentication property="principal.username" />]</li>
   </ul>
+  Number of Authorities : [${principal.authorities?size}]
+  <ol>
+      <#list principal.authorities as auth>
+        <li>${auth}</li>
+      </#list>
+  </ol>
 </@sec.authorize>
 
 <@sec.authorize access="! isAuthenticated()">

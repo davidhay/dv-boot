@@ -18,24 +18,26 @@ This script runs the DataVault Web App in 'standalone' mode for testing Spring a
 
 #### Attempt to access a protected resource
 
+
 In your browser, navigate to http://localhost:8080/secure, it should redirect you to the 
 datavault login page.
 
-You will login as the user 'user'. To get the password look through the console output of the
-running webapp for something like...
+#### username : 'user'
 
-```
-Using generated security password: 4c87495e-f07c-4f29-8278-32c6cc49073c
-```
+You will login as the user 'user', password 'password'. To get the password look through the console output of the
+running webapp for something like...
 
 Once you are logged in, you should be back on http://localhost:8080/secure.
 
 The screen should say something like...
 * SECURE PAGE
 * Logout (link)
-* logged in as user
+* logged in as [user]
 
-If you click the logout link, you should end up at http://auth/confirmation page. 
+Number of Authorities [1]
+1. ROLE_USER
+
+If you click the logout link, you should end up at http://localhost:8080/auth/confirmation page. 
 The confirmation page should say something like...
 * To logout of the DataVault you must close your browser, in order to end the browser session, so that you will be logged out of EASE.
 
@@ -47,4 +49,10 @@ If you navigate now to http://localhost:8080/index - the page should say ...
 If you login again, you should be taken back to the http://localhost:8080/ page which should say...
 * INDEX PAGE
 * Logout (link)
-* logged in as user
+* logged in as [user]
+
+Number of Authorities [1]
+1. ROLE_USER
+
+#### username : 'admin'
+You can also login as 'admin'/'admin' - the 'admin' user has ROLE_USER and ROLE_ADMIN

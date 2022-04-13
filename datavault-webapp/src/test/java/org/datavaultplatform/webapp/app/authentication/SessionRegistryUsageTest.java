@@ -49,11 +49,9 @@ public class SessionRegistryUsageTest {
   @MockBean
   NotifyLoginService mNotifyLoginService;
 
-  @Value("${spring.security.user.name}")
-  String username;
+  String username = "user";
 
-  @Value("${spring.security.user.password}")
-  String password;
+  String password = "password";
 
   @Autowired
   SessionRegistry sessionRegistry;

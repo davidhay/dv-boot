@@ -5,6 +5,10 @@ import org.datavaultplatform.webapp.authentication.AuthenticationSuccess;
 import org.datavaultplatform.webapp.config.HttpSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -15,6 +19,7 @@ import org.springframework.security.core.session.SessionRegistry;
 @EnableWebSecurity
 @Slf4j
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Configuration
 public class StandaloneWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Value("${spring.security.debug:false}")
@@ -50,5 +55,18 @@ public class StandaloneWebSecurityConfig extends WebSecurityConfigurerAdapter {
       log.warn("CSRF PROTECTION DISABLED!!!!");
       http.csrf().disable();
     }
+  }
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+    auth.inMemoryAuthentication().withUser("admin").password("admin").roles("USER","ADMIN");
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    // ALTHOUGH THIS SEEMS LIKE USELESS CODE,
+    // IT'S REQUIRED TO PREVENT SPRING BOOT AUTO-CONFIGURATION
+    return super.authenticationManagerBean();
   }
 }

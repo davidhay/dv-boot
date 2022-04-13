@@ -74,8 +74,8 @@ public class ProtectedPathsTest {
   @SneakyThrows
   void testSpecialCaseAuthSecurityCheck() {
     mvc.perform(formLogin("/auth/security_check")
-        .user("testuser")
-        .password("testpassword"))
+        .user("user")
+        .password("password"))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/"));
   }
@@ -113,8 +113,8 @@ public class ProtectedPathsTest {
   @SneakyThrows
   private MvcResult accessPathUsingRoles(String path, String... roles) {
     return mvc.perform(get(path)
-            .with(user("testuser")
-                .password("pass")
+            .with(user("user")
+                .password("password")
                 .roles(roles)))
         .andReturn();
   }

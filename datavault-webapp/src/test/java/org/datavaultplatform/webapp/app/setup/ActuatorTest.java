@@ -4,16 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.datavaultplatform.webapp.test.TestClockConfig;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +36,9 @@ import org.springframework.test.web.servlet.ResultActions;
 @Import(TestClockConfig.class)
 @ActiveProfiles("standalone")
 public class ActuatorTest {
+
+  private static final List<String> PUBLIC_ENDPOINTS = Arrays.asList("info","health","customtime");
+  private static final List<String> PRIVATE_ENDPOINTS = Arrays.asList("env","loggers","mappings","beans");
 
   @Autowired
   ObjectMapper mapper;
@@ -70,16 +80,42 @@ public class ActuatorTest {
   }
 
   @Test
-  void testEndpoints() throws Exception {
+  void testAvailableEndpoints() throws Exception {
 
-    assertEquals(ImmutableSet.of("env","beans","info","health","customtime"), endpoints);
+    assertEquals(Collections.singleton("*"), this.endpoints);
 
     ResultActions temp = mvc.perform(get("/actuator"))
         .andExpect(status().isOk());
 
+    ArrayList<String> endpoints = new ArrayList<>();
+    endpoints.addAll(PUBLIC_ENDPOINTS);
+    endpoints.addAll(PRIVATE_ENDPOINTS);
+
     for(String endpoint : endpoints){
       temp.andExpect(jsonPath("$._links."+endpoint).exists());
     }
+  }
 
+  @ParameterizedTest
+  @MethodSource("publicEndpoints")
+  void testPublicEndpoints(String endpoint) throws Exception {
+    mvc.perform(get(String.format("/actuator/%s",endpoint)))
+        .andExpect(status().isOk());
+  }
+
+  @ParameterizedTest
+  @MethodSource("privateEndpoints")
+  void testPrivateEndpoints(String endpoint) throws Exception {
+    mvc.perform(get(String.format("/actuator/%s",endpoint)))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("http://localhost/auth/login"));
+  }
+
+  public static List<String> publicEndpoints(){
+    return PUBLIC_ENDPOINTS;
+  }
+
+  public static List<String> privateEndpoints(){
+    return PRIVATE_ENDPOINTS;
   }
 }

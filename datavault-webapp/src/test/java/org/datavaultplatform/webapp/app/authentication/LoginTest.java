@@ -49,11 +49,9 @@ public class LoginTest {
   @Autowired
   MockMvc mvc;
 
-  @Value("${spring.security.user.name}")
-  String username;
+  String username = "user";
 
-  @Value("${spring.security.user.password}")
-  String password;
+  String password = "password";
 
   @Test
   void testUnsecure() throws Exception {

@@ -21,9 +21,10 @@ public class HttpSecurityUtils {
 
             requests.antMatchers("/resources/**").permitAll(); //OKAY
             requests.antMatchers("/actuator/info").permitAll();  //OKAY
-            requests.antMatchers("/actuator/status").permitAll();  //OKAY
+            requests.antMatchers("/actuator/health").permitAll();  //OKAY
             requests.antMatchers("/actuator/customtime").permitAll();  //OKAY
-            requests.antMatchers("/actuator/**").permitAll(); //TODO - check this
+            requests.antMatchers("/actuator","/actuator/").permitAll(); //OKAY
+            requests.antMatchers("/actuator/**").hasRole("ADMIN"); //TODO - check this
             requests.antMatchers("/error").permitAll();      //OKAY
             requests.antMatchers("/auth/**").permitAll();      //OKAY
 
