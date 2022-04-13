@@ -3,5 +3,5 @@
 java -version
 
 #this script runs the datavault webapp in 'standalone' mode - this helps test Spring and SpringSecurity config.
-#this script uses Maven with Spring Boot specific goal
-SPRING_PROFILES_ACTIVE=standalone ./mvnw spring-boot:run --projects datavault-webapp
+#this script uses executable WAR file.
+SPRING_PROFILES_ACTIVE=standalone java -jar datavault-webapp/target/datavault-webapp.war
