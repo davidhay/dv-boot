@@ -25,9 +25,12 @@
 	</scm>
 
 	<properties>
+		<!-- general -->
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skip.unit.tests>false</skip.unit.tests>
-		<java.version>1.8</java.version>
+
+		<!-- dependency versions -->
 		<git.commit.plugin.version>4.9.10</git.commit.plugin.version>
 		<aws.java.sdk.bom.version>1.12.196</aws.java.sdk.bom.version>
 		<oci.java.sdk.bom.version>2.22.0</oci.java.sdk.bom.version>

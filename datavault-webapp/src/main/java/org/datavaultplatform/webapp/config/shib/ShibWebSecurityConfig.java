@@ -51,10 +51,13 @@ public class ShibWebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
+    // no form login for 'shib'
+
     HttpSecurityUtils.authorizeRequests(http);
 
     HttpSecurityUtils.sessionManagement(http, sessionRegistry);
 
+    // 'shib' specific config
     http.addFilterAt(shibFilter(), AbstractPreAuthenticatedProcessingFilter.class);
 
     http.exceptionHandling(ex -> ex.authenticationEntryPoint(http403EntryPoint));

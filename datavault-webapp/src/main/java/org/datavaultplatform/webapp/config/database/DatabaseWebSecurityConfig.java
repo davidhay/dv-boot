@@ -46,11 +46,11 @@ public class DatabaseWebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    HttpSecurityUtils.sessionManagement(http, sessionRegistry);
+    HttpSecurityUtils.formLogin(http, authenticationSuccess);
 
     HttpSecurityUtils.authorizeRequests(http);
 
-    HttpSecurityUtils.formLogin(http, authenticationSuccess);
+    HttpSecurityUtils.sessionManagement(http, sessionRegistry);
 
   }
 

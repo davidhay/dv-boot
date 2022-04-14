@@ -38,7 +38,7 @@ import org.springframework.util.FileSystemUtils;
 @ActiveProfiles("standalone")
 @Slf4j
 @DirtiesContext
-public class PropertyConfigTest {
+public class ExternalPropertyFileConfigTest {
 
   private static final String RAND_1 = UUID.randomUUID().toString();
   private static final String RAND_2 = UUID.randomUUID().toString();

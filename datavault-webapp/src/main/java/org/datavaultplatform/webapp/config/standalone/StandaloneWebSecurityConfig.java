@@ -44,12 +44,13 @@ public class StandaloneWebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    HttpSecurityUtils.sessionManagement(http, sessionRegistry);
+    HttpSecurityUtils.formLogin(http, authenticationSuccess);
 
     HttpSecurityUtils.authorizeRequests(http, true);
 
-    HttpSecurityUtils.formLogin(http, authenticationSuccess);
+    HttpSecurityUtils.sessionManagement(http, sessionRegistry);
 
+    //When testing 'standalone' profile, we can optionally disable CSRF
     if (csrfDisabled) {
       //only for testing 'standalone' profile
       log.warn("CSRF PROTECTION DISABLED!!!!");

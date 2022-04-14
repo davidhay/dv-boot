@@ -214,8 +214,8 @@ public class RestServiceImpl implements RestService {
 
     @Override
     public VaultInfo[] getPendingVaultsListing() {
-        HttpEntity<?> response = get(brokerURL + "/pendingVaults", VaultInfo[].class);
-        return (VaultInfo[])response.getBody();
+        ResponseEntity<VaultInfo[]> response = get(brokerURL + "/pendingVaults", VaultInfo[].class);
+        return response.getBody();
     }
 
     @Override
