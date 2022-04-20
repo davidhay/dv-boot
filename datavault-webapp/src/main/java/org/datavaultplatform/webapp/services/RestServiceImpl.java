@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.common.model.ArchiveStore;
 import org.datavaultplatform.common.model.DataManager;
 import org.datavaultplatform.common.model.Dataset;
@@ -58,6 +59,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service("restService")
 @Profile("!standalone")
+@Slf4j
 public class RestServiceImpl implements RestService {
 
     private static final Logger logger = LoggerFactory.getLogger(RestServiceImpl.class);
@@ -65,19 +67,18 @@ public class RestServiceImpl implements RestService {
     private final String brokerURL;
     private final String brokerApiKey;
 
+    private final RestTemplate restTemplate;
+
     @Autowired
     public RestServiceImpl(
         @Value("${broker.url}")String brokerURL,
-        @Value("${broker.api.key}") String brokerApiKey) {
+        @Value("${broker.api.key}") String brokerApiKey, RestTemplate restTemplate) {
         this.brokerURL = brokerURL;
         this.brokerApiKey = brokerApiKey;
+        this.restTemplate = restTemplate;
     }
 
     private <T> ResponseEntity<T> exchange(String url, Class<T> clazz, HttpMethod method, Object payload) {
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        restTemplate.setErrorHandler(new ApiErrorHandler());
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -105,6 +106,7 @@ public class RestServiceImpl implements RestService {
 
         // todo : check the http status code before returning?
 
+        log.info("broker.url [{}]",url);
         return restTemplate.exchange(url, method, entity, clazz);
 
     }

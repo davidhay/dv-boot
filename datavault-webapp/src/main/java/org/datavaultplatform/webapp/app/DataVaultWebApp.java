@@ -8,6 +8,7 @@ import org.datavaultplatform.webapp.config.LdapConfig;
 import org.datavaultplatform.webapp.config.MailConfig;
 import org.datavaultplatform.webapp.config.MvcConfig;
 import org.datavaultplatform.webapp.config.PropertiesConfig;
+import org.datavaultplatform.webapp.config.RestTemplateConfig;
 import org.datavaultplatform.webapp.config.SecurityConfig;
 import org.datavaultplatform.webapp.config.WebConfig;
 import org.datavaultplatform.webapp.config.database.DatabaseProfileConfig;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 @SpringBootApplication
@@ -30,7 +32,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 @Import({PropertiesConfig.class, WebConfig.class, MvcConfig.class, ActutatorConfig.class,
     SecurityConfig.class, MailConfig.class, LdapConfig.class,
         StandaloneProfileConfig.class, DatabaseProfileConfig.class,
-    ShibProfileConfig.class})
+    ShibProfileConfig.class, RestTemplateConfig.class})
 @Slf4j
 public class DataVaultWebApp implements CommandLineRunner {
 

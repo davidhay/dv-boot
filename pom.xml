@@ -45,6 +45,7 @@
 		<gson.version>2.9.0</gson.version>
 		<testng.version>6.14.3</testng.version>
 		<owasp.dependency.check.version>7.0.4</owasp.dependency.check.version>
+		<spring.cloud.version>3.1.1</spring.cloud.version>
 	</properties>
 
 	<dependencyManagement>
@@ -115,6 +116,11 @@
 				<groupId>org.testng</groupId>
 				<artifactId>testng</artifactId>
 				<version>${testng.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+				<version>${spring.cloud.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
