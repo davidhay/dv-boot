@@ -1,5 +1,7 @@
 package org.datavaultplatform.webapp.controllers;
 
+import java.util.function.Function;
+import org.datavaultplatform.webapp.config.MailConfig.MessageCreator;
 import org.datavaultplatform.webapp.services.RestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -16,13 +18,13 @@ import org.springframework.stereotype.Controller;
 public class FeedbackController {
 
     private final MailSender mailSender;
-    private final SimpleMailMessage templateMessage;
+    private final MessageCreator messageCreator;
 
     @Autowired
     public FeedbackController(MailSender mailSender,
-        SimpleMailMessage templateMessage) {
+        MessageCreator messageCreator) {
         this.mailSender = mailSender;
-        this.templateMessage = templateMessage;
+        this.messageCreator = messageCreator;
     }
 
     /*

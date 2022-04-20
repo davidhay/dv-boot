@@ -46,6 +46,8 @@
 		<testng.version>6.14.3</testng.version>
 		<owasp.dependency.check.version>7.0.4</owasp.dependency.check.version>
 		<spring.cloud.version>3.1.1</spring.cloud.version>
+		<testcontainers.version>1.17.1</testcontainers.version>
+		<json.path.version>2.7.0</json.path.version>
 	</properties>
 
 	<dependencyManagement>
@@ -121,6 +123,20 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
 				<version>${spring.cloud.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${testcontainers.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.jayway.jsonpath</groupId>
+				<artifactId>json-path</artifactId>
+				<version>${json.path.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

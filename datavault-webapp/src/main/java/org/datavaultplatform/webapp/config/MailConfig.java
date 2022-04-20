@@ -32,14 +32,10 @@ public class MailConfig {
   @Value("${mail.protocol:smtp}")
   String mailProtocol;
 
-
   @Bean
-  SimpleMailMessage templateMessage() {
-    SimpleMailMessage result = new SimpleMailMessage();
-    result.setTo(to);
-    result.setFrom(from);
-    result.setSubject(subject);
-    return result;
+  @ConfigurationProperties(prefix = "jmail")
+  Properties javaMailProperties() {
+    return new Properties();
   }
 
   @Bean
@@ -53,10 +49,29 @@ public class MailConfig {
     return result;
   }
 
-  @Bean
-  @ConfigurationProperties(prefix = "jmail")
-  Properties javaMailProperties() {
-    return new Properties();
+  public interface MessageCreator {
+    SimpleMailMessage createMailMessage(String messageText);
   }
 
+  @Bean
+  MessageCreator messageCreator() {
+      return messageText -> {
+        SimpleMailMessage result = new SimpleMailMessage();
+        SimpleMailMessage template = this.templateMessage();
+        template.copyTo(result);
+        result.setText(messageText);
+        return result;
+      };
+  }
+
+  /*
+  This POJO used to be a Bean. It is shared - so not thread safe.
+  */
+  private SimpleMailMessage templateMessage() {
+    SimpleMailMessage result = new SimpleMailMessage();
+    result.setTo(to);
+    result.setFrom(from);
+    result.setSubject(subject);
+    return result;
+  }
 }

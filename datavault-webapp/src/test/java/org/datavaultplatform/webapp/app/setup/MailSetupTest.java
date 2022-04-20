@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.config.MailConfig.MessageCreator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,8 +29,7 @@ public class MailSetupTest {
   JavaMailSenderImpl mailSender;
 
   @Autowired
-  @Qualifier("templateMessage")
-  SimpleMailMessage templateMessage;
+  MessageCreator messageCreator;
 
   @Test
   void testMailSenderConfig(){
@@ -48,10 +48,12 @@ public class MailSetupTest {
 
   @Test
   void testMailMessageConfig() {
-    assertThat(templateMessage.getSubject()).isEqualTo("DataVault feedback");
-    assertThat(templateMessage.getFrom()).isEqualTo("feedback@datavaultplatform.org");
-    assertThat(templateMessage.getTo().length).isOne();
-    assertThat(templateMessage.getTo()[0]).isEqualTo("mail.admin@test.com");
+    SimpleMailMessage message = messageCreator.createMailMessage("blah");
+    assertThat(message.getSubject()).isEqualTo("DataVault feedback");
+    assertThat(message.getFrom()).isEqualTo("feedback@datavaultplatform.org");
+    assertThat(message.getTo().length).isOne();
+    assertThat(message.getTo()[0]).isEqualTo("mail.admin@test.com");
+    assertThat(message.getText()).isEqualTo("blah");
   }
 
 }
