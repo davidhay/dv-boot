@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.datavaultplatform.webapp.services.NotifyLogoutService;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,14 +29,13 @@ import org.springframework.security.web.session.HttpSessionCreatedEvent;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 /**
  * This class tests that the HttpSessionEventPublisher bean is working as expected.
  */
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class HttpSessionEventPublisherTest {
 
   @MockBean

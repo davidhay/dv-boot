@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.datavaultplatform.webapp.config.logging.LoggingInterceptor;
+import org.datavaultplatform.webapp.test.ProfileDatabase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import org.springframework.cloud.contract.wiremock.WireMockRestServiceServer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -33,8 +33,8 @@ import org.springframework.web.client.RestTemplate;
  3) add an appender to LoggingInterceptor to capture actual log messages
  */
 @SpringBootTest
-@ActiveProfiles("database")
 @Slf4j
+@ProfileDatabase
 @TestPropertySource(properties = "logging.level.org.datavaultplatform.webapp.config.logging=DEBUG")
 public class RestTemplateLoggingTest {
 

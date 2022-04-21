@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,14 +20,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartResolver;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class MultiPartUploadTest {
 
   @Value("classpath:images/logo-dvsmall.jpg")

@@ -20,20 +20,20 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.datavaultplatform.common.api.ApiError;
 import org.datavaultplatform.webapp.exception.ForbiddenException;
+import org.datavaultplatform.webapp.test.ProfileDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
-@ActiveProfiles("database")
+@ProfileDatabase
 @TestPropertySource(properties = "logging.level.org.datavaultplatform.webapp.config.logging=DEBUG")
 public class RestTemplateErrorHandlerTest {
 

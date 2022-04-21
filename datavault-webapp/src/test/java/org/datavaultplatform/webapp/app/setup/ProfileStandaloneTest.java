@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -19,15 +20,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
  Test checks that the SpringBoot app starts up ok with 'standalone' profile
  This test will fail if there is a problem with the Spring Configuration for 'standalone' profile.
  */
-@ActiveProfiles("standalone")
 @SpringBootTest
+@ProfileStandalone
 public class ProfileStandaloneTest {
 
   @Autowired

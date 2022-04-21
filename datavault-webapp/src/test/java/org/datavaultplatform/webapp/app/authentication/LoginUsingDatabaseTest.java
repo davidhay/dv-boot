@@ -9,6 +9,7 @@ import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.common.request.ValidateUser;
 import org.datavaultplatform.webapp.services.RestService;
+import org.datavaultplatform.webapp.test.ProfileDatabase;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -25,13 +26,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("database")
 @AutoConfigureMockMvc
-@TestPropertySource(properties = "ldap.password=dummy-password")
+@ProfileDatabase
 public class LoginUsingDatabaseTest {
 
   @LocalServerPort

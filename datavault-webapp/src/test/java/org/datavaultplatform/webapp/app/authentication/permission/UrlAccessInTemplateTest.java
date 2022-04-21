@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class UrlAccessInTemplateTest {
 
   public static final String ROLE_ADMIN_RETENTION_POLICIES = "ADMIN_RETENTIONPOLICIES";

@@ -6,6 +6,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import java.util.UUID;
 import org.datavaultplatform.webapp.config.MailConfig.MessageCreator;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.client.RestTemplate;
@@ -29,7 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  See https://hub.docker.com/r/mailhog/mailhog
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("standalone")
+@ProfileStandalone
 @Testcontainers
 public class MailTest {
 
@@ -57,7 +57,7 @@ public class MailTest {
   @DynamicPropertySource
   static void postgresqlProperties(DynamicPropertyRegistry registry) {
     registry.add("tc.mailhog.http", () -> topLevelContainer.getMappedPort(PORT_HTTP));
-    registry.add("mail.host", () -> topLevelContainer.getHost());
+    registry.add("mail.host", topLevelContainer::getHost);
     registry.add("mail.port", () -> topLevelContainer.getMappedPort(PORT_SMTP));
   }
 
@@ -65,8 +65,8 @@ public class MailTest {
   @Test
   void testMailRandomMessage() {
     String rand = UUID.randomUUID().toString();
-    String subject = "sub-"+rand;
-    String text = "text-"+rand;
+    String subject = "sub-" + rand;
+    String text = "text-" + rand;
     String from = "test.sender@test.com";
     String to = "test.recvr@test.com";
 

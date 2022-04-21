@@ -15,6 +15,7 @@ import javax.servlet.Filter;
 import lombok.SneakyThrows;
 import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationFilter;
 import org.datavaultplatform.webapp.authentication.shib.ShibAuthenticationProvider;
+import org.datavaultplatform.webapp.test.ProfileShib;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -32,17 +33,14 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import org.springframework.security.web.session.ConcurrentSessionFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
  Test checks that the SpringBoot app starts up ok with 'shib' profile
  This test will fail if there is a problem with the Spring Configuration for 'shib' profile.
  */
-@ActiveProfiles("shib")
 @SpringBootTest
-@TestPropertySource(properties = "ldap.password=dummy-password")
+@ProfileShib
 public class ProfileShibTest {
 
     @Autowired

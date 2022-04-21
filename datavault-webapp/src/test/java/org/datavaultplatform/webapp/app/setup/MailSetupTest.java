@@ -5,23 +5,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.config.MailConfig.MessageCreator;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 /* We override this property to test better.
 In the default config 'mail.administrator' has same value as 'mail.from',
 this is not great for testing.
 */
-@TestPropertySource(properties = "mail.administrator=mail.admin@test.com")
 @SpringBootTest
 @Slf4j
-@ActiveProfiles("standalone")
+@ProfileStandalone
+@TestPropertySource(properties = "mail.administrator=mail.admin@test.com")
 public class MailSetupTest {
 
   @Autowired

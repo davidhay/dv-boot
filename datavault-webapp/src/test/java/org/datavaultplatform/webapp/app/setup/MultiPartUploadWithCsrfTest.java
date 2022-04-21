@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.webapp.test.CsrfInfo;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +25,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartResolver;
@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartResolver;
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Slf4j
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class MultiPartUploadWithCsrfTest {
 
   @Value("classpath:images/logo-dvsmall.jpg")

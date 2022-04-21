@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import java.io.Serializable;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +28,6 @@ import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.ui.ModelMap;
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
-@ActiveProfiles("standalone")
+@ProfileStandalone
 /**
  * Checks that the SpringSecurity authorize Jsp Tag in freemarker templates
  * will delegate to the registered PermissionEvaluator bean when the authorize tag

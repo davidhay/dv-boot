@@ -7,6 +7,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import org.datavaultplatform.common.request.CreateClientEvent;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,7 +24,6 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @WithMockUser(username = "mUser")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@ActiveProfiles("standalone")
+@ProfileStandalone
 /**
  * This test checks basic Logout.
  * It does NOT test the LogoutListener and NotifyLogoutService as these depend

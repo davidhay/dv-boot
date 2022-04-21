@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.webapp.services.NotifyLoginService;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,7 +35,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Checks that when a user logs in, their session is registered in the SessionRegistry
@@ -43,7 +42,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Import(WaitForLogoutNotificationConfig.class)
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class SessionRegistryUsageTest {
 
   @MockBean

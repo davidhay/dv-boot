@@ -2,14 +2,14 @@ package org.datavaultplatform.webapp.app.setup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class SessionRegistrySetupTest {
 
   /**

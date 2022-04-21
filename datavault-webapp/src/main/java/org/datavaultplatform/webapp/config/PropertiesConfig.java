@@ -13,9 +13,6 @@ import org.springframework.core.env.Environment;
 @PropertySources({
     // application.properties and application-{profile}.properties are added by default
 
-    //TODO : bundled with application - might need to conditionally remove for non-standalone
-    @PropertySource("classpath:datavault.properties"),
-
     @PropertySource(
         value = "file://${DATAVAULT_HOME}/config/datavault.properties",
         ignoreResourceNotFound = true),

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.datavaultplatform.common.model.Group;
 import org.datavaultplatform.common.request.CreateClientEvent;
 import org.datavaultplatform.webapp.services.NotifyLoginService;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.datavaultplatform.webapp.test.TestUtils;
 import org.datavaultplatform.webapp.test.WaitForLogoutNotificationConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 /**
@@ -43,11 +43,11 @@ import org.springframework.test.context.TestPropertySource;
  * TODO - make sure SLOW tests like this only run in CICD
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ProfileStandalone
 @TestPropertySource(properties = "server.servlet.session.timeout=1m")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Slf4j
 @Import(WaitForLogoutNotificationConfig.class)
-@ActiveProfiles("standalone")
 @Disabled
 public class SessionTimedOutTest {
 

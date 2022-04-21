@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.datavaultplatform.webapp.controllers.standalone.api.SimulateErrorController;
 import org.datavaultplatform.webapp.model.test.EmailInfo;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,14 +20,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.ui.Model;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = "datavault.csrf.disabled=true")
 @Slf4j
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class ErrorHandlingTest {
 
   @Autowired

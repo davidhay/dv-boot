@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.lang.reflect.Field;
 import lombok.SneakyThrows;
 import org.datavaultplatform.common.services.LDAPService;
+import org.datavaultplatform.webapp.test.ProfileStandalone;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("standalone")
+@ProfileStandalone
 public class LdapSetupTest {
 
   @Autowired
