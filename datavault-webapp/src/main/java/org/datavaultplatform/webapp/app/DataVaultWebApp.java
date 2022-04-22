@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -57,6 +58,8 @@ public class DataVaultWebApp implements CommandLineRunner {
     log.info("java.vendor [{}]",env.getProperty("java.vendor"));
     log.info("os.arch [{}]",env.getProperty("os.arch"));
     log.info("os.name [{}]",env.getProperty("os.name"));
+    log.info("spring-boot.version [{}]", SpringBootVersion.getVersion());
     log.info("active.profiles {}", (Object) env.getActiveProfiles());
+    log.info("git.commit.id.abbrev [{}]", env.getProperty("git.commit.id.abbrev","-1"));
   }
 }
